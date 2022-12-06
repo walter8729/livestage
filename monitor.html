@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>MONITOREO SERVIDORES</title>
+
+
+    <script src="./dist/jquery-1.12.4.min.js"></script>
+
+    <script src="./dist/ovenplayer.js"></script>
+
+    <script src="./dist/hls.js"></script>
+
+    <meta http-equiv="refresh" content="300">
+
+    <style type="text/css">
+        body {
+            background: rgb(2, 0, 36);
+            background: radial-gradient(circle, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgb(79, 226, 255) 100%);
+            font-family: 'Open Sans', sans-serif;
+            padding-bottom: 0 px;
+            margin: auto;
+        }
+
+        header {
+            padding-top: 0px;
+            padding-bottom: 0px;
+            color: #fff;
+        }
+
+        nav {
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            text-shadow: 3px 3px 10px #000010;
+            font-size: 40px;
+            padding: 0px;
+        }
+
+        .contenedor {
+            position: relative;
+            display: grid;
+            grid-template-columns: auto auto;
+            padding: 0px;
+            width: 100%;
+            margin: auto auto;
+
+            margin-top: 0;
+            margin-left: 5;
+            margin-right: 5;
+
+            min-width: 240px;
+            max-width: 1360px;
+            background: rgb(34, 193, 195);
+            background: linear-gradient(30deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
+        }
+
+        .videos {
+            border-radius: 5px;
+            margin: 7px 7px;
+            max-width: 100%;
+            max-height: 480px;
+            border: 8px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 5);
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+    <header>
+        <h1>SERVIDORES DE STREAMING MASTV</h1>
+    </header>
+
+    <div class="contenedor">
+
+        <div class="videos">
+            <div id="reproductor1"></div>
+        </div>
+
+        <div class="videos">
+            <div id="reproductor2"></div>
+        </div>
+
+        <div class="videos">
+            <div id="reproductor3"></div>
+        </div>
+
+        <div class="videos">
+            <div id="reproductor4"></div>
+        </div>
+
+    </div>
+
+
+    <script>
+        OvenPlayer.debug(true);
+
+        const src = [
+            {
+                file: 'http://video.camaronhosting.com/mastv/mastv/playlist.m3u8',
+                label: 'Server: HOSTPY | Subida: TIGO',
+                type: 'hls'
+            },
+            {
+                file: 'http://142.44.241.232:8080/hls/1/stream.m3u8',
+                label: 'Server: OVH | Edge: HOSTPY',
+                type: 'hls'
+            },
+            {
+                file: 'http://193.123.100.4:8080/hls/1/stream.m3u8',
+                label: 'Server: ORACLE | Subida: PERSONAL',
+                type: 'hls'
+            },
+            {
+                file: 'ws://193.123.99.208:3333/app/stream1',
+                label: 'RETORNO | Server: ORACLE 2 | Subida: Personal ',
+                type: 'webrtc'
+            }
+
+        ];
+
+
+        function make_player(id, src) {
+            const player = OvenPlayer.create("reproductor" + id,
+                {
+                    image: "rw.png",
+                    // title: "MAS TV",
+                    sources: src,
+                    autoStart: true,
+                    mute: true,
+                    expandFullScreenUI: true,
+                    waterMark: {
+                        text: src.label,
+                        font: {
+                            'font-size': '20px',
+                            'color': '#F00',
+                            'font-weight': 'bold'
+                        },
+                        position: 'top-left',
+                    },
+                });
+        }
+
+
+        $(document).ready(function () {
+            for (var i = 1; i < 5; i++) {
+                make_player(i, src[i - 1]);
+            }
+        });
+
+
+    </script>
+
+
+
+</body>
+
+</html>
