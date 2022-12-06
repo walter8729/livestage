@@ -228,6 +228,12 @@ addEventListener("keydown", (evento) => {
         createrVideoContainer("videocontainer1con2y3", "reproductor1con2y3", player1Data);
         createrVideoContainer("videocontainer2con1", "reproductor2con1", player2Data);
     };
+    //tecla 4 alfanumerica
+    if (evento.keyCode == 52 && OvenPlayer.getPlayerByContainerId("reproductor1con2y3")) {
+        OvenPlayer.getPlayerByContainerId("reproductor3con1y2").remove();
+        removeElementsByClass("videocontainer3con1y2");  
+        createrVideoContainer("videocontainer2con1", "reproductor2con1", player2Data);
+    };
 
     //tecla 5 alfanumerica
     if (evento.keyCode == 53 && !OvenPlayer.getPlayerByContainerId("reproductor1con2y3")) {
