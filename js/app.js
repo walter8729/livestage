@@ -1,4 +1,4 @@
-OvenPlayer.debug(true);
+OvenPlayer.debug(false);
 
 //definimos sources, para cada reproductor.
 //por ahora solo tiene uno, pero cada reproductor
@@ -8,11 +8,12 @@ const movil_01 = [{
     label: 'WebRTC',
     type: 'webrtc'
 },
-{
-    file: 'http://192.168.1.51/app/stream1/llhls.m3u8',
-    label: 'LLHLS',
-    type: 'hls'
-}];
+// {
+//     file: 'http://192.168.1.51/app/stream1/llhls.m3u8',
+//     label: 'LLHLS',
+//     type: 'hls'
+// }
+];
 
 const movil_02 = [{
     file: 'ws://192.168.1.51:3333/app/stream2',
@@ -23,51 +24,56 @@ const movil_02 = [{
     file: 'http://192.168.1.51/app/stream2/llhls.m3u8',
     label: 'LLHLS',
     type: 'hls'
-}];
+}
+];
 
 const movil_03 = [{
     file: 'ws://192.168.1.51:3333/app/stream3',
     label: 'WebRTC',
     type: 'webrtc'
 },
-{
-    file: 'http://192.168.1.51/app/stream3/llhls.m3u8',
-    label: 'LLHLS',
-    type: 'hls'
-}];
+// {
+//     file: 'http://192.168.1.51/app/stream3/llhls.m3u8',
+//     label: 'LLHLS',
+//     type: 'hls'
+// }
+];
 
 const movil_04 = [{
     file: 'ws://192.168.1.51:3333/app/stream4',
     label: 'WebRTC',
     type: 'webrtc'
 },
-{
-    file: 'http://192.168.1.51/app/stream4/llhls.m3u8',
-    label: 'LLHLS',
-    type: 'hls'
-}];
+// {
+//     file: 'http://192.168.1.51/app/stream4/llhls.m3u8',
+//     label: 'LLHLS',
+//     type: 'hls'
+// }
+];
 
 const movil_05 = [{
     file: 'ws://192.168.1.51:3333/app/stream5',
     label: 'WebRTC',
     type: 'webrtc'
 },
-{
-    file: 'http://192.168.1.51/app/stream5/llhls.m3u8',
-    label: 'LLHLS',
-    type: 'hls'
-}];
+// {
+//     file: 'http://192.168.1.51/app/stream5/llhls.m3u8',
+//     label: 'LLHLS',
+//     type: 'hls'
+// }
+];
 
 const movil_06 = [{
     file: 'ws://192.168.1.51:3333/app/stream6',
     label: 'WebRTC',
     type: 'webrtc'
 },
-{
-    file: 'http://192.168.1.51/app/stream6/llhls.m3u8',
-    label: 'LLHLS',
-    type: 'hls'
-}];
+// {
+//     file: 'http://192.168.1.51/app/stream6/llhls.m3u8',
+//     label: 'LLHLS',
+//     type: 'hls'
+// }
+];
 
 
 /**
@@ -88,7 +94,7 @@ const playerWaterMark = {
 const playerCommonSettings = {
     image: "rw.png",
     autoStart: false,
-    mute: false,
+    mute: true,
     showBigPlayButton: true,
     controls: true,
     expandFullScreenUI: true,
@@ -98,57 +104,31 @@ const playerCommonSettings = {
 
 //definimos los parametros unicos 
 //que tendra cada reproductor
-let player1Data = {
+const player1Data = {
     title: "Móvil 01",
-    sources: movil_01,
+    sources: movil_01
 }
 
 const player2Data = {
     title: "Móvil 02",
-    sources: movil_01,
-    playerCommonSettings
+    sources: movil_01
 }
 const player3Data = {
     title: "Móvil 03",
-    sources: movil_01,
-    playerCommonSettings
+    sources: movil_01
 }
 const player4Data = {
     title: "Móvil 04",
-    sources: movil_01,
-    playerCommonSettings
+    sources: movil_01
 }
 const player5Data = {
     title: "Móvil 05",
-    sources: movil_01,
-    playerCommonSettings
+    sources: movil_01
 }
 const player6Data = {
     title: "Móvil 06",
-    sources: movil_01,
-    playerCommonSettings
+    sources: movil_01
 }
-
-
-
-
-
-
-
-
-// $(document).ready(function () {
-//     const player1 = OvenPlayer.create("reproductor1", {
-//         image: "rw.png",
-//         title: "Movil 01",
-//         waterMark: waterMark,
-//         sources: movil_01,
-//         autoStart: false,
-//         mute: false,
-//         showBigPlayButton: true,
-//         controls: true
-//     });
-// });
-
 
 
 /** Creamos una funcion que recibira un id y un source y con ello creamos un nuevo reproductor.
@@ -184,6 +164,9 @@ function createrVideoContainer(nombreContainer, nombreReproductor, fuenteReprodu
     const src = Object.assign(fuenteReproductor, playerCommonSettings);
     OvenPlayer.create(nombreReproductor, src);
 }
+
+
+
 
 function removeAllVideoContainers() {
     removeAllPlayers();
