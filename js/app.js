@@ -1,46 +1,79 @@
-OvenPlayer.debug(false);
+OvenPlayer.debug(true);
 
 //definimos sources, para cada reproductor.
 //por ahora solo tiene uno, pero cada reproductor
 //puede tener mas de un source.
 const movil_01 = [{
-    file: 'http://192.168.1.51:8080/app/stream1/playlist.m3u8',
-    label: 'stream',
+    file: 'ws://192.168.1.51:3333/app/stream1',
+    label: 'WebRTC',
+    type: 'webrtc'
+},
+{
+    file: 'http://192.168.1.51/app/stream1/llhls.m3u8',
+    label: 'LLHLS',
     type: 'hls'
 }];
 
 const movil_02 = [{
-    file: 'http://192.168.1.51:8080/app/stream2/playlist.m3u8',
-    label: 'stream',
+    file: 'ws://192.168.1.51:3333/app/stream2',
+    label: 'WebRTC',
+    type: 'webrtc'
+},
+{
+    file: 'http://192.168.1.51/app/stream2/llhls.m3u8',
+    label: 'LLHLS',
     type: 'hls'
 }];
 
 const movil_03 = [{
-    file: 'http://192.168.1.51:8080/app/stream3/playlist.m3u8',
-    label: 'stream',
+    file: 'ws://192.168.1.51:3333/app/stream3',
+    label: 'WebRTC',
+    type: 'webrtc'
+},
+{
+    file: 'http://192.168.1.51/app/stream3/llhls.m3u8',
+    label: 'LLHLS',
     type: 'hls'
 }];
 
 const movil_04 = [{
-    file: 'http://192.168.1.51:8080/app/stream4/playlist.m3u8',
-    label: 'stream',
+    file: 'ws://192.168.1.51:3333/app/stream4',
+    label: 'WebRTC',
+    type: 'webrtc'
+},
+{
+    file: 'http://192.168.1.51/app/stream4/llhls.m3u8',
+    label: 'LLHLS',
     type: 'hls'
 }];
 
 const movil_05 = [{
-    file: 'http://192.168.1.51:8080/app/stream5/playlist.m3u8',
-    label: 'stream',
+    file: 'ws://192.168.1.51:3333/app/stream5',
+    label: 'WebRTC',
+    type: 'webrtc'
+},
+{
+    file: 'http://192.168.1.51/app/stream5/llhls.m3u8',
+    label: 'LLHLS',
     type: 'hls'
 }];
 
 const movil_06 = [{
-    file: 'http://192.168.1.51:8080/app/stream6/playlist.m3u8',
-    label: 'stream',
+    file: 'ws://192.168.1.51:3333/app/stream6',
+    label: 'WebRTC',
+    type: 'webrtc'
+},
+{
+    file: 'http://192.168.1.51/app/stream6/llhls.m3u8',
+    label: 'LLHLS',
     type: 'hls'
 }];
 
-//definimos ubicacion de archivo para marca de agua
-//asi como posicion tamanho y transparencia.
+
+/**
+ *Definimos ubicacion de archivo para marca de agua 
+ asi como posicion tamanho y transparencia. 
+ */
 const playerWaterMark = {
     image: './live.jpg',
     position: 'top-left',
@@ -59,7 +92,7 @@ const playerCommonSettings = {
     showBigPlayButton: true,
     controls: true,
     expandFullScreenUI: true,
-    waterMark: playerWaterMark
+    //waterMark: playerWaterMark
 }
 
 
@@ -154,6 +187,7 @@ function createrVideoContainer(nombreContainer, nombreReproductor, fuenteReprodu
 
 function removeAllVideoContainers() {
     removeAllPlayers();
+    removeAllPlayers();
     removeElementsByClass("videocontainer1");
     removeElementsByClass("videocontainer2");
     removeElementsByClass("videocontainer3");
@@ -195,12 +229,7 @@ addEventListener("keydown", (evento) => {
     //tecla 0 alfanumerica 
     if (evento.keyCode == 48) {
         removeAllPlayers();
-        removeElementsByClass("videocontainer1");
-        removeElementsByClass("videocontainer2");
-        removeElementsByClass("videocontainer3");
-        // $("div").remove(".videocontainer1")
-        // $("div").remove(".videocontainer2")
-        // $("div").remove(".videocontainer3")
+        removeAllVideoContainers();
 
     };
 
@@ -209,6 +238,12 @@ addEventListener("keydown", (evento) => {
         removeAllVideoContainers();
         createrVideoContainer("videocontainer1", "reproductor1", player1Data);
     };
+    //tecla f alfanumerica
+    if (evento.keyCode == 70 && OvenPlayer.getPlayerByContainerId("reproductor1")) {
+        let pr1 = OvenPlayer.getPlayerByContainerId("reproductor1");
+        pr1.toggleFullScreen();
+    };
+
 
     //tecla 2 alfanumerica
     if (evento.keyCode == 50 && !OvenPlayer.getPlayerByContainerId("reproductor2")) {
@@ -216,11 +251,31 @@ addEventListener("keydown", (evento) => {
         createrVideoContainer("videocontainer2", "reproductor2", player2Data);
     };
 
+    //tecla f alfanumerica
+    if (evento.keyCode == 70 && OvenPlayer.getPlayerByContainerId("reproductor2")) {
+        let pr2 = OvenPlayer.getPlayerByContainerId("reproductor2");
+        pr2.toggleFullScreen();
+    };
+
+
+
     //tecla 3 alfanumerica
     if (evento.keyCode == 51 && !OvenPlayer.getPlayerByContainerId("reproductor3")) {
         removeAllVideoContainers();
         createrVideoContainer("videocontainer3", "reproductor3", player3Data);
     };
+
+    //tecla f alfanumerica
+    if (evento.keyCode == 70 && OvenPlayer.getPlayerByContainerId("reproductor3")) {
+        let pr3 = OvenPlayer.getPlayerByContainerId("reproductor3");
+        pr3.toggleFullScreen();
+    };
+
+
+
+
+
+
 
     //tecla 4 alfanumerica
     if (evento.keyCode == 52 && !OvenPlayer.getPlayerByContainerId("reproductor1con2y3")) {
@@ -231,7 +286,7 @@ addEventListener("keydown", (evento) => {
     //tecla 4 alfanumerica
     if (evento.keyCode == 52 && OvenPlayer.getPlayerByContainerId("reproductor1con2y3")) {
         OvenPlayer.getPlayerByContainerId("reproductor3con1y2").remove();
-        removeElementsByClass("videocontainer3con1y2");  
+        removeElementsByClass("videocontainer3con1y2");
         createrVideoContainer("videocontainer2con1", "reproductor2con1", player2Data);
     };
 
@@ -244,12 +299,54 @@ addEventListener("keydown", (evento) => {
     //tecla 5 alfanumerica opcion 2
     if (evento.keyCode == 53 && OvenPlayer.getPlayerByContainerId("reproductor1con2y3")) {
         OvenPlayer.getPlayerByContainerId("reproductor2con1").remove();
-        removeElementsByClass("videocontainer2con1");  
+        removeElementsByClass("videocontainer2con1");
+        createrVideoContainer("videocontainer3con1y2", "reproductor3con1y2", player3Data);
+    };
+    //tecla 5 alfanumerica opcion 3
+    if (evento.keyCode == 53 && OvenPlayer.getPlayerByContainerId("reproductor2con3")) {
+        OvenPlayer.getPlayerByContainerId("reproductor2con3").remove();
+        removeElementsByClass("videocontainer2con3");
         createrVideoContainer("videocontainer3con1y2", "reproductor3con1y2", player3Data);
     };
 
+
+
+    //tecla 6 alfanumerica
+    if (evento.keyCode == 54 && !OvenPlayer.getPlayerByContainerId("reproductor2con3")) {
+        removeAllVideoContainers();
+        createrVideoContainer("videocontainer2con3", "reproductor2con3", player2Data);
+        createrVideoContainer("videocontainer3con1y2", "reproductor3con1y2", player3Data);
+    };
+
+    //tecla  alfanumerica opcion 2
+    if (evento.keyCode == 54 && OvenPlayer.getPlayerByContainerId("reproductor2con1")) {
+        OvenPlayer.getPlayerByContainerId("reproductor2con1").remove();
+        removeElementsByClass("videocontainer2con2");
+        createrVideoContainer("videocontainer3con1y2", "reproductor3con1y2", player3Data);
+    };
+
+    //tecla  alfanumerica opcion 3
+    if (evento.keyCode == 54 && OvenPlayer.getPlayerByContainerId("reproductor1con2y3")) {
+        OvenPlayer.getPlayerByContainerId("reproductor1con").remove();
+        removeElementsByClass("videocontainer2con2");
+        createrVideoContainer("videocontainer3con1y2", "reproductor3con1y2", player3Data);
+    };
+
+
+
+
+
+
+
+
     console.log("Escuchando, la tecla del evento es: " + evento.keyCode);
     console.log("La lista de players en el dom es: " + list);
+
+    for (let index = 0; index < list.length; index++) {
+        const element = list[index];
+        console.log("Elemento en la lista N: " + index + " ", element);
+
+    }
 });
 
 
