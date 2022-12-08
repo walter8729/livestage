@@ -1,18 +1,5 @@
 OvenPlayer.debug(false);
 
-//definimos sources, para cada reproductor.
-//por ahora solo tiene uno, pero cada reproductor
-//puede tener mas de un source.
-const movil_01 = [{
-    file: 'ws://192.168.1.51:3333/app/stream1',
-    label: 'WebRTC Movil 01',
-    type: 'webrtc'
-},
-{
-    file: 'http://192.168.1.51/app/stream1/llhls.m3u8',
-    label: 'LLHLS  Movil 01',
-    type: 'hls'
-}
 /** 
 *Definimos sources, para cada reproductor.
 *por ahora solo tiene uno, pero cada reproductor
@@ -124,7 +111,6 @@ const player1Data = {
     title: "Móvil 01",
     sources: movil_01
 }
-
 const player2Data = {
     title: "Móvil 02",
     sources: movil_01
@@ -187,6 +173,7 @@ function createrVideoContainer(nombreContainer, nombreReproductor, fuenteReprodu
 function removeAllVideoContainers() {
     removeAllPlayers();
     removeAllPlayers();
+    removeElementsByClass("videocontainer0");
     removeElementsByClass("videocontainer1");
     removeElementsByClass("videocontainer2");
     removeElementsByClass("videocontainer3");
@@ -223,11 +210,17 @@ function removeAllPlayers() {
 
 addEventListener("keydown", (evento) => {
     let list = OvenPlayer.getPlayerList();
-
     //tecla 0 alfanumerica 
     if (evento.keyCode == 48) {
         removeAllPlayers();
         removeAllVideoContainers();
+
+    };
+
+    //tecla 0 alfanumerica 
+    if (evento.keyCode == 72) {
+ 
+        createrVideoContainer("videocontainer0","reproductor0",);
 
     };
 
@@ -346,48 +339,3 @@ addEventListener("keydown", (evento) => {
 
     }
 });
-
-
-
-
-
-
-
-
-
-// console.log('hello world son of the');
-
-// let search = document.getElementById('search');
-
-// if (search) {
-//     search.addEventListener("keyup", (event) => {
-//         let h1Text = document.getElementById("searchText");
-//         console.log("esto esta ahora en imput search " + search.value);
-//         console.log("esto esta ahora en el h1 " + h1Text.innerText);
-//         h1Text.innerText = search.value;
-//     });
-// } else {
-//     console.log("No se encontro el id " + search);
-// };
-
-// function enviarPeticionPost() {
-//     let data = new FormData();
-//     data.append('metodo', 'hello');
-//     fetch("backend.php", {
-//         method: "post",
-//         // headers: {
-//         //     'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-//         //     'Content-Type': 'multipart/form-data'
-//         // },
-//         body: data
-//     })
-//         .then((res) => { return res.text(); })
-//         .then((txt) => {
-//             document.getElementById('titu').innerHTML = txt;
-//             console.log(txt);
-//         })
-//         .catch((err) => { console.log("Errores en el fetch post " + err); });
-
-//     // (C) PREVENT HTML FORM SUBMIT
-//     return false;
-// }
