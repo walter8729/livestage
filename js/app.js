@@ -1,78 +1,86 @@
 OvenPlayer.debug(false);
 
-//definimos sources, para cada reproductor.
-//por ahora solo tiene uno, pero cada reproductor
-//puede tener mas de un source.
-const movil_01 = [{
-    file: 'ws://192.168.1.51:3333/app/stream1',
-    label: 'WebRTC',
-    type: 'webrtc'
-},
-// {
-//     file: 'http://192.168.1.51/app/stream1/llhls.m3u8',
-//     label: 'LLHLS',
-//     type: 'hls'
-// }
+/** 
+*Definimos sources, para cada reproductor.
+*por ahora solo tiene uno, pero cada reproductor
+*puede tener mas de un source.
+ */
+const movil_01 = [
+    {
+        file: 'ws://192.168.1.51:3333/app/stream1',
+        label: 'WebRTC',
+        type: 'webrtc'
+    },
+    {
+        file: 'http://192.168.1.51/app/stream1/llhls.m3u8',
+        label: 'LLHLS',
+        type: 'hls'
+    }
 ];
 
-const movil_02 = [{
-    file: 'ws://192.168.1.51:3333/app/stream2',
-    label: 'WebRTC',
-    type: 'webrtc'
-},
-{
-    file: 'http://192.168.1.51/app/stream2/llhls.m3u8',
-    label: 'LLHLS',
-    type: 'hls'
-}
+const movil_02 = [
+    {
+        file: 'ws://192.168.1.51:3333/app/stream2',
+        label: 'WebRTC',
+        type: 'webrtc'
+    },
+    {
+        file: 'http://192.168.1.51/app/stream2/llhls.m3u8',
+        label: 'LLHLS',
+        type: 'hls'
+    }
 ];
 
-const movil_03 = [{
-    file: 'ws://192.168.1.51:3333/app/stream3',
-    label: 'WebRTC',
-    type: 'webrtc'
-},
-// {
-//     file: 'http://192.168.1.51/app/stream3/llhls.m3u8',
-//     label: 'LLHLS',
-//     type: 'hls'
-// }
+const movil_03 = [
+    {
+        file: 'ws://192.168.1.51:3333/app/stream3',
+        label: 'WebRTC',
+        type: 'webrtc'
+    },
+    {
+        file: 'http://192.168.1.51/app/stream3/llhls.m3u8',
+        label: 'LLHLS',
+        type: 'hls'
+    }
 ];
 
-const movil_04 = [{
-    file: 'ws://192.168.1.51:3333/app/stream4',
-    label: 'WebRTC',
-    type: 'webrtc'
-},
-// {
-//     file: 'http://192.168.1.51/app/stream4/llhls.m3u8',
-//     label: 'LLHLS',
-//     type: 'hls'
-// }
+const movil_04 = [
+    {
+        file: 'ws://192.168.1.51:3333/app/stream4',
+        label: 'WebRTC',
+        type: 'webrtc'
+    },
+    {
+        file: 'http://192.168.1.51/app/stream4/llhls.m3u8',
+        label: 'LLHLS',
+        type: 'hls'
+    }
 ];
 
-const movil_05 = [{
-    file: 'ws://192.168.1.51:3333/app/stream5',
-    label: 'WebRTC',
-    type: 'webrtc'
-},
-// {
-//     file: 'http://192.168.1.51/app/stream5/llhls.m3u8',
-//     label: 'LLHLS',
-//     type: 'hls'
-// }
+const movil_05 = [
+    {
+        file: 'ws://192.168.1.51:3333/app/stream5',
+        label: 'WebRTC',
+        type: 'webrtc'
+    },
+    {
+        file: 'http://192.168.1.51/app/stream5/llhls.m3u8',
+        label: 'LLHLS',
+        type: 'hls'
+    }
 ];
 
-const movil_06 = [{
-    file: 'ws://192.168.1.51:3333/app/stream6',
-    label: 'WebRTC',
-    type: 'webrtc'
-},
-// {
-//     file: 'http://192.168.1.51/app/stream6/llhls.m3u8',
-//     label: 'LLHLS',
-//     type: 'hls'
-// }
+const movil_06 = [
+    {
+        file: 'ws://192.168.1.51:3333/app/stream6',
+        label: 'WebRTC',
+        type: 'webrtc'
+    },
+    {
+        file: 'http://192.168.1.51/app/stream6/llhls.m3u8',
+        label: 'LLHLS',
+        type: 'hls'
+    }
 ];
 
 
@@ -90,7 +98,10 @@ const playerWaterMark = {
     opacity: 0.3
 };
 
-//ajustes comunes para todos los reproductores
+/**
+ * Creamos unos ajustes y parametros que seran comunes 
+ * en todos los reproductores
+ */
 const playerCommonSettings = {
     image: "rw.png",
     autoStart: false,
@@ -104,31 +115,35 @@ const playerCommonSettings = {
 
 //definimos los parametros unicos 
 //que tendra cada reproductor
-const player1Data = {
+const player1Data = Object.assign({
     title: "Móvil 01",
     sources: movil_01
-}
+}, playerCommonSettings);
 
-const player2Data = {
+const player2Data = Object.assign({
     title: "Móvil 02",
-    sources: movil_01
-}
-const player3Data = {
+    sources: movil_02
+}, playerCommonSettings);
+
+const player3Data = Object.assign({
     title: "Móvil 03",
-    sources: movil_01
-}
-const player4Data = {
+    sources: movil_03
+}, playerCommonSettings);
+
+const player4Data = Object.assign({
     title: "Móvil 04",
-    sources: movil_01
-}
-const player5Data = {
+    sources: movil_04
+}, playerCommonSettings);
+
+const player5Data = Object.assign({
     title: "Móvil 05",
-    sources: movil_01
-}
-const player6Data = {
+    sources: movil_05
+}, playerCommonSettings);
+
+const player6Data = Object.assign({
     title: "Móvil 06",
-    sources: movil_01
-}
+    sources: movil_06
+}, playerCommonSettings);
 
 
 /** Creamos una funcion que recibira un id y un source y con ello creamos un nuevo reproductor.
@@ -136,7 +151,8 @@ const player6Data = {
  @param {Objet} src - Lista de Objetos con la configuracion que tengra el reproductor.
 */
 function makePlayer(id, src) {
-    OvenPlayer.create(id, src);
+    const player = OvenPlayer.create(id, src);
+    console.log("Se creo el reproductor en elemento con id " + id);
 }
 
 
@@ -161,14 +177,15 @@ function createrVideoContainer(nombreContainer, nombreReproductor, fuenteReprodu
     ctnr.appendChild(vc1);//agrego el videoConteiner al Contenedor principal
 
     //creamos la instancia del reproductor en el wrapper
-    const src = Object.assign(fuenteReproductor, playerCommonSettings);
-    OvenPlayer.create(nombreReproductor, src);
+    makePlayer(nombreReproductor, fuenteReproductor);
 }
 
 
 
 
 function removeAllVideoContainers() {
+    //por alguna extrana razon hay que llamar dos veces 
+    //al metodo para eliminar todos los elementos del arreglo.
     removeAllPlayers();
     removeAllPlayers();
     removeElementsByClass("videocontainer1");
@@ -184,8 +201,9 @@ function removeAllVideoContainers() {
 
 
 
-/**Creamos una funcion que recibe un className y lo eliminara del Dom
-    @param {String} className -  Nombre de la clase a eliminar
+/** 
+ * Creamos una funcion que recibe un className y lo eliminara del Dom
+ * @param {String} className -  Nombre de la clase a eliminar
 */
 function removeElementsByClass(className) {
     const elements = document.getElementsByClassName(className);
@@ -194,9 +212,10 @@ function removeElementsByClass(className) {
     }
 }
 
-
-//creamos una funcion que remueve todos los objetos de tipo
-//Ovenplayer de la lista del DOM.
+/**
+ * Creamos una funcion que remueve todos los objetos de tipo
+ * Ovenplayer de la lista del DOM.
+ */
 function removeAllPlayers() {
     for (let i = 0; i < OvenPlayer.getPlayerList().length; i++) {
         OvenPlayer.getPlayerList()[i].remove();
@@ -216,7 +235,7 @@ addEventListener("keydown", (evento) => {
 
     };
 
-    //telca 1 alfanumerica
+    //tecla 1 alfanumerica
     if (evento.keyCode == 49 && !OvenPlayer.getPlayerByContainerId("reproductor1")) {
         removeAllVideoContainers();
         createrVideoContainer("videocontainer1", "reproductor1", player1Data);
@@ -226,6 +245,9 @@ addEventListener("keydown", (evento) => {
         let pr1 = OvenPlayer.getPlayerByContainerId("reproductor1");
         pr1.toggleFullScreen();
     };
+
+
+
 
 
     //tecla 2 alfanumerica
@@ -239,6 +261,8 @@ addEventListener("keydown", (evento) => {
         let pr2 = OvenPlayer.getPlayerByContainerId("reproductor2");
         pr2.toggleFullScreen();
     };
+
+
 
 
 
@@ -258,8 +282,6 @@ addEventListener("keydown", (evento) => {
 
 
 
-
-
     //tecla 4 alfanumerica
     if (evento.keyCode == 52 && !OvenPlayer.getPlayerByContainerId("reproductor1con2y3")) {
         removeAllVideoContainers();
@@ -272,6 +294,10 @@ addEventListener("keydown", (evento) => {
         removeElementsByClass("videocontainer3con1y2");
         createrVideoContainer("videocontainer2con1", "reproductor2con1", player2Data);
     };
+
+
+
+
 
     //tecla 5 alfanumerica
     if (evento.keyCode == 53 && !OvenPlayer.getPlayerByContainerId("reproductor1con2y3")) {
@@ -291,6 +317,9 @@ addEventListener("keydown", (evento) => {
         removeElementsByClass("videocontainer2con3");
         createrVideoContainer("videocontainer3con1y2", "reproductor3con1y2", player3Data);
     };
+
+
+
 
 
 
@@ -331,48 +360,3 @@ addEventListener("keydown", (evento) => {
 
     }
 });
-
-
-
-
-
-
-
-
-
-// console.log('hello world son of the');
-
-// let search = document.getElementById('search');
-
-// if (search) {
-//     search.addEventListener("keyup", (event) => {
-//         let h1Text = document.getElementById("searchText");
-//         console.log("esto esta ahora en imput search " + search.value);
-//         console.log("esto esta ahora en el h1 " + h1Text.innerText);
-//         h1Text.innerText = search.value;
-//     });
-// } else {
-//     console.log("No se encontro el id " + search);
-// };
-
-// function enviarPeticionPost() {
-//     let data = new FormData();
-//     data.append('metodo', 'hello');
-//     fetch("backend.php", {
-//         method: "post",
-//         // headers: {
-//         //     'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-//         //     'Content-Type': 'multipart/form-data'
-//         // },
-//         body: data
-//     })
-//         .then((res) => { return res.text(); })
-//         .then((txt) => {
-//             document.getElementById('titu').innerHTML = txt;
-//             console.log(txt);
-//         })
-//         .catch((err) => { console.log("Errores en el fetch post " + err); });
-
-//     // (C) PREVENT HTML FORM SUBMIT
-//     return false;
-// }
