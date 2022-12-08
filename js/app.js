@@ -8,12 +8,12 @@ OvenPlayer.debug(false);
 const movil_01 = [
     {
         file: 'ws://192.168.1.51:3333/app/stream1',
-        label: 'WebRTC',
+        label: 'WebRTC M01',
         type: 'webrtc'
     },
     {
         file: 'http://192.168.1.51/app/stream1/llhls.m3u8',
-        label: 'LLHLS',
+        label: 'LLHLS M01',
         type: 'hls'
     }
 ];
@@ -21,12 +21,12 @@ const movil_01 = [
 const movil_02 = [
     {
         file: 'ws://192.168.1.51:3333/app/stream2',
-        label: 'WebRTC',
+        label: 'WebRTC M02',
         type: 'webrtc'
     },
     {
         file: 'http://192.168.1.51/app/stream2/llhls.m3u8',
-        label: 'LLHLS',
+        label: 'LLHLS M02',
         type: 'hls'
     }
 ];
@@ -34,12 +34,12 @@ const movil_02 = [
 const movil_03 = [
     {
         file: 'ws://192.168.1.51:3333/app/stream3',
-        label: 'WebRTC',
+        label: 'WebRTC M03',
         type: 'webrtc'
     },
     {
         file: 'http://192.168.1.51/app/stream3/llhls.m3u8',
-        label: 'LLHLS',
+        label: 'LLHLS M03',
         type: 'hls'
     }
 ];
@@ -47,12 +47,12 @@ const movil_03 = [
 const movil_04 = [
     {
         file: 'ws://192.168.1.51:3333/app/stream4',
-        label: 'WebRTC',
+        label: 'WebRTC M04',
         type: 'webrtc'
     },
     {
         file: 'http://192.168.1.51/app/stream4/llhls.m3u8',
-        label: 'LLHLS',
+        label: 'LLHLS M04',
         type: 'hls'
     }
 ];
@@ -60,12 +60,12 @@ const movil_04 = [
 const movil_05 = [
     {
         file: 'ws://192.168.1.51:3333/app/stream5',
-        label: 'WebRTC',
+        label: 'WebRTC M05',
         type: 'webrtc'
     },
     {
         file: 'http://192.168.1.51/app/stream5/llhls.m3u8',
-        label: 'LLHLS',
+        label: 'LLHLS M05',
         type: 'hls'
     }
 ];
@@ -73,12 +73,12 @@ const movil_05 = [
 const movil_06 = [
     {
         file: 'ws://192.168.1.51:3333/app/stream6',
-        label: 'WebRTC',
+        label: 'WebRTC M06',
         type: 'webrtc'
     },
     {
         file: 'http://192.168.1.51/app/stream6/llhls.m3u8',
-        label: 'LLHLS',
+        label: 'LLHLS M06',
         type: 'hls'
     }
 ];
