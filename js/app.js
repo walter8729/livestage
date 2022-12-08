@@ -5,74 +5,90 @@ OvenPlayer.debug(false);
 //puede tener mas de un source.
 const movil_01 = [{
     file: 'ws://192.168.1.51:3333/app/stream1',
-    label: 'WebRTC',
+    label: 'WebRTC Movil 01',
     type: 'webrtc'
 },
-// {
-//     file: 'http://192.168.1.51/app/stream1/llhls.m3u8',
-//     label: 'LLHLS',
-//     type: 'hls'
-// }
+{
+    file: 'http://192.168.1.51/app/stream1/llhls.m3u8',
+    label: 'LLHLS  Movil 01',
+    type: 'hls'
+}
+/** 
+*Definimos sources, para cada reproductor.
+*por ahora solo tiene uno, pero cada reproductor
+*puede tener mas de un source.
+ */
+const movil_01 = [
+    {
+        file: 'ws://192.168.1.51:3333/app/stream1',
+        label: 'WebRTC M01',
+        type: 'webrtc'
+    },
+    {
+        file: 'http://192.168.1.51/app/stream1/llhls.m3u8',
+        label: 'LLHLS M01',
+        type: 'hls'
+    }
 ];
 
 const movil_02 = [{
     file: 'ws://192.168.1.51:3333/app/stream2',
-    label: 'WebRTC',
+    label: 'WebRTC  Movil 02',
     type: 'webrtc'
 },
 {
     file: 'http://192.168.1.51/app/stream2/llhls.m3u8',
-    label: 'LLHLS',
+    label: 'LLHLS  Movil 02',
     type: 'hls'
 }
 ];
 
 const movil_03 = [{
     file: 'ws://192.168.1.51:3333/app/stream3',
-    label: 'WebRTC',
+    label: 'WebRTC Movil 03',
     type: 'webrtc'
 },
-// {
-//     file: 'http://192.168.1.51/app/stream3/llhls.m3u8',
-//     label: 'LLHLS',
-//     type: 'hls'
-// }
+{
+    file: 'http://192.168.1.51/app/stream3/llhls.m3u8',
+    label: 'LLHLS Movil 03',
+    type: 'hls'
+}
 ];
 
 const movil_04 = [{
     file: 'ws://192.168.1.51:3333/app/stream4',
-    label: 'WebRTC',
+    label: 'WebRTC Movil 04',
     type: 'webrtc'
 },
-// {
-//     file: 'http://192.168.1.51/app/stream4/llhls.m3u8',
-//     label: 'LLHLS',
-//     type: 'hls'
-// }
+{
+    file: 'http://192.168.1.51/app/stream4/llhls.m3u8',
+    label: 'LLHLS Movil 04',
+    type: 'hls'
+}
 ];
 
 const movil_05 = [{
     file: 'ws://192.168.1.51:3333/app/stream5',
-    label: 'WebRTC',
+    label: 'WebRTC Movil 05',
     type: 'webrtc'
 },
-// {
-//     file: 'http://192.168.1.51/app/stream5/llhls.m3u8',
-//     label: 'LLHLS',
-//     type: 'hls'
-// }
+{
+    file: 'http://192.168.1.51/app/stream5/llhls.m3u8',
+    label: 'LLHLS Movil 05',
+    type: 'hls'
+}
 ];
 
 const movil_06 = [{
     file: 'ws://192.168.1.51:3333/app/stream6',
-    label: 'WebRTC',
+    label: 'WebRTC Movil 06',
     type: 'webrtc'
 },
-// {
-//     file: 'http://192.168.1.51/app/stream6/llhls.m3u8',
-//     label: 'LLHLS',
-//     type: 'hls'
-// }
+{
+    file: 'http://192.168.1.51/app/stream6/llhls.m3u8',
+    label: 'LLHLS Movil 06',
+    type: 'hls'
+}
 ];
 
 
@@ -206,7 +222,6 @@ function removeAllPlayers() {
 
 
 addEventListener("keydown", (evento) => {
-
     let list = OvenPlayer.getPlayerList();
 
     //tecla 0 alfanumerica 
