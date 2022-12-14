@@ -109,6 +109,7 @@ const playerCommonSettings = {
     showBigPlayButton: true,
     controls: true,
     expandFullScreenUI: true,
+    autoFallback: false,
     //waterMark: playerWaterMark
 }
 
@@ -188,10 +189,13 @@ function removeAllVideoContainers() {
     //al metodo para eliminar todos los elementos del arreglo.
     removeAllPlayers();
     removeAllPlayers();
-    removeElementsByClass("videocontainer0");
+
     removeElementsByClass("videocontainer1");
     removeElementsByClass("videocontainer2");
     removeElementsByClass("videocontainer3");
+    removeElementsByClass("videocontainer4");
+    removeElementsByClass("videocontainer5");
+    removeElementsByClass("videocontainer6");
 
     removeElementsByClass("videocontainer1con2y3");
     removeElementsByClass("videocontainer2con1");
@@ -227,12 +231,36 @@ function removeAllPlayers() {
 
 addEventListener("keydown", (evento) => {
     let list = OvenPlayer.getPlayerList();
+
+
+    //tecla h
+    if (evento.keyCode == 72) {
+        let element = document.getElementById("dummy");
+        let hidden = element.getAttribute("hidden");
+
+        if (hidden) {
+            element.removeAttribute("hidden");
+
+        } else {
+            element.setAttribute("hidden", "hidden");
+        }
+
+    };
+
+
+
+
+
     //tecla 0 alfanumerica 
     if (evento.keyCode == 48) {
         removeAllPlayers();
         removeAllVideoContainers();
 
     };
+
+
+
+
 
     //tecla 1 alfanumerica
     if (evento.keyCode == 49 && !OvenPlayer.getPlayerByContainerId("reproductor1")) {
@@ -241,8 +269,7 @@ addEventListener("keydown", (evento) => {
     };
     //tecla f alfanumerica
     if (evento.keyCode == 70 && OvenPlayer.getPlayerByContainerId("reproductor1")) {
-        let pr1 = OvenPlayer.getPlayerByContainerId("reproductor1");
-        pr1.toggleFullScreen();
+        OvenPlayer.getPlayerByContainerId("reproductor1").toggleFullScreen();
     };
 
 
@@ -257,8 +284,7 @@ addEventListener("keydown", (evento) => {
 
     //tecla f alfanumerica
     if (evento.keyCode == 70 && OvenPlayer.getPlayerByContainerId("reproductor2")) {
-        let pr2 = OvenPlayer.getPlayerByContainerId("reproductor2");
-        pr2.toggleFullScreen();
+        OvenPlayer.getPlayerByContainerId("reproductor2").toggleFullScreen();
     };
 
 
@@ -273,8 +299,7 @@ addEventListener("keydown", (evento) => {
 
     //tecla f alfanumerica
     if (evento.keyCode == 70 && OvenPlayer.getPlayerByContainerId("reproductor3")) {
-        let pr3 = OvenPlayer.getPlayerByContainerId("reproductor3");
-        pr3.toggleFullScreen();
+        OvenPlayer.getPlayerByContainerId("reproductor3").toggleFullScreen();
     };
 
 
@@ -346,6 +371,45 @@ addEventListener("keydown", (evento) => {
 
 
 
+    //tecla 7 alfanumerica
+    if (evento.keyCode == 55 && !OvenPlayer.getPlayerByContainerId("reproductor4")) {
+        removeAllVideoContainers();
+        createrVideoContainer("videocontainer4", "reproductor4", player4Data);
+    };
+    //tecla f alfanumerica
+    if (evento.keyCode == 70 && OvenPlayer.getPlayerByContainerId("reproductor4")) {
+        OvenPlayer.getPlayerByContainerId("reproductor4").toggleFullScreen();
+    };
+
+
+
+
+
+    //tecla 8 alfanumerica
+    if (evento.keyCode == 56 && !OvenPlayer.getPlayerByContainerId("reproductor5")) {
+        removeAllVideoContainers();
+        createrVideoContainer("videocontainer5", "reproductor5", player5Data);
+    };
+
+    //tecla f alfanumerica
+    if (evento.keyCode == 70 && OvenPlayer.getPlayerByContainerId("reproductor5")) {
+        OvenPlayer.getPlayerByContainerId("reproductor5").toggleFullScreen();
+    };
+
+
+
+
+
+    //tecla 9 alfanumerica
+    if (evento.keyCode == 57 && !OvenPlayer.getPlayerByContainerId("reproductor6")) {
+        removeAllVideoContainers();
+        createrVideoContainer("videocontainer6", "reproductor6", player6Data);
+    };
+
+    //tecla f alfanumerica
+    if (evento.keyCode == 70 && OvenPlayer.getPlayerByContainerId("reproductor6")) {
+        OvenPlayer.getPlayerByContainerId("reproductor6").toggleFullScreen();
+    };
 
 
 

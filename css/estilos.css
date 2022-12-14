@@ -15,7 +15,7 @@ header {
 .videobg {
     position: fixed;
     right: 0;
-    bottom: 0;  
+    bottom: 0;
     min-width: 100%;
     min-height: 100%;
     width: auto;
@@ -25,9 +25,9 @@ header {
 }
 
 .overlay {
-    position:absolute;
+    position: absolute;
     right: 0;
-    bottom: 0;  
+    bottom: 0;
     min-width: 100%;
     min-height: 100%;
     width: auto;
@@ -38,13 +38,13 @@ header {
 
 nav {
     color: #000f2f;
-    padding-top:30px;
-    padding-bottom:20px;
-    position:absolute;
-    top:0;
-    width:100%;
-    z-index:1;
-    
+    padding-top: 30px;
+    padding-bottom: 20px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+
 }
 
 h1 {
@@ -74,7 +74,7 @@ img {
     min-width: 240px;
     max-width: 1920px;
 
-    
+
     /* background: #D1D1D1; */
 }
 
@@ -93,7 +93,7 @@ img {
     top: 200px;
     left: 960px;
     width: 854px;
-    height: 480px;      
+    height: 480px;
     max-height: 480px;
     border-radius: 5px;
     margin: 7px 7px;
@@ -101,12 +101,17 @@ img {
     box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 5);
 }
 
-.videocontainer1,.videocontainer2, .videocontainer3 {
+.videocontainer1,
+.videocontainer2,
+.videocontainer3,
+.videocontainer4,
+.videocontainer5,
+.videocontainer6 {
     position: absolute;
     top: 200px;
     left: 80px;
     width: 854px;
-    height: 480px;  
+    height: 480px;
     max-height: 480px;
     border-radius: 5px;
     margin: 7px 7px;
