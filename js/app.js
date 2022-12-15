@@ -1,5 +1,12 @@
 OvenPlayer.debug(false);
 
+
+
+let listabg = cargarBgAjax();
+
+let actualbg = 0;
+
+
 /** 
 *Definimos sources, para cada reproductor.
 *por ahora solo tiene uno, pero cada reproductor
@@ -229,6 +236,71 @@ function removeAllPlayers() {
 
 
 
+function cargarBgAjax() {
+
+    const dir = "/videobg";
+    const fileextension = ".mp4";
+    let filename = "";
+    let fileList = [];
+
+    $.ajax({
+        //This will retrieve the contents of the folder if the folder is configured as 'browsable'
+        url: dir,
+        success: function (data) {
+            // List all mp4 file names in the page
+            $(data).find("a:contains(" + fileextension + ")").each(function () {
+                filename = this.href.replace(window.location.host, "").replace("http:///", "");
+                fileList.push(filename);
+            });
+        }
+    });
+
+    return fileList;
+}
+
+
+
+
+
+
+
+
+
+
+function cargarBgFecth() {
+
+    const fileextension = ".mp4";
+    let filename = "";
+    let fileList = [];
+
+    fetch("/videobg")
+        .then((response) => response)
+        .then((data) => {
+            // find("a:contains(" + fileextension + ")").each(function () {
+
+            //     filename = this.href.replace(window.location.host, "").replace("http:///", "");
+            //     fileList.push(filename);
+            // });
+            console.log(data);
+
+
+
+        })
+        .catch(console.error);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 addEventListener("keydown", (evento) => {
     let list = OvenPlayer.getPlayerList();
 
@@ -423,3 +495,6 @@ addEventListener("keydown", (evento) => {
 
     }
 });
+
+
+

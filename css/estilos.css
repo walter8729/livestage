@@ -89,7 +89,7 @@ img {
 
 .videocontainer0 {
     position: absolute;
-    background: #000010;
+    /* background: #000010; */
     top: 200px;
     left: 960px;
     width: 854px;
@@ -107,16 +107,23 @@ img {
 .videocontainer4,
 .videocontainer5,
 .videocontainer6 {
-    position: absolute;
+    /* resize: both; */
+    overflow:hidden;
+    position:absolute;
     top: 200px;
     left: 80px;
+    min-width: 352px;
+    min-height: 240px;
     width: 854px;
     height: 480px;
-    max-height: 480px;
+    max-width: 960px;
+    max-height: 560px;
+    /* aspect-ratio: 16/9; */
     border-radius: 5px;
     margin: 7px 7px;
     border: 8px solid rgba(255, 255, 255, 0.8);
     box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 5);
+    
 }
 
 
