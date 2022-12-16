@@ -15,7 +15,19 @@ header {
 .videobg {
     position: fixed;
     right: 0;
-    bottom: 0;  
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: 0;
+
+}
+
+.overlay {
+    position: absolute;
+    right: 0;
+    bottom: 0;
     min-width: 100%;
     min-height: 100%;
     width: auto;
@@ -26,13 +38,13 @@ header {
 
 nav {
     color: #000f2f;
-    padding-top:30px;
-    padding-bottom:20px;
-    position:absolute;
-    top:0;
-    width:100%;
-    z-index:1;
-    
+    padding-top: 30px;
+    padding-bottom: 20px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+
 }
 
 h1 {
@@ -40,6 +52,12 @@ h1 {
     text-shadow: 3px 3px 10px #000010;
     font-size: 40px;
     padding: 0px;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 
 .container {
@@ -56,7 +74,7 @@ h1 {
     min-width: 240px;
     max-width: 1920px;
 
-    
+
     /* background: #D1D1D1; */
 }
 
@@ -71,11 +89,11 @@ h1 {
 
 .videocontainer0 {
     position: absolute;
-    background: #000010;
-    top: 113px;
-    left: 990px;
+    /* background: #000010; */
+    top: 200px;
+    left: 960px;
     width: 854px;
-    height: 480px;      
+    height: 480px;
     max-height: 480px;
     border-radius: 5px;
     margin: 7px 7px;
@@ -83,27 +101,39 @@ h1 {
     box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 5);
 }
 
-.videocontainer1,.videocontainer2, .videocontainer3 {
-    position: absolute;
-    top: 113px;
-    left: 61px;
+.videocontainer1,
+.videocontainer2,
+.videocontainer3,
+.videocontainer4,
+.videocontainer5,
+.videocontainer6 {
+    /* resize: both; */
+    overflow:hidden;
+    position:absolute;
+    top: 200px;
+    left: 80px;
+    min-width: 352px;
+    min-height: 240px;
     width: 854px;
-    height: 480px;  
-    max-height: 480px;
+    height: 480px;
+    max-width: 960px;
+    max-height: 560px;
+    /* aspect-ratio: 16/9; */
     border-radius: 5px;
     margin: 7px 7px;
     border: 8px solid rgba(255, 255, 255, 0.8);
     box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 5);
+    
 }
 
 
 
 .videocontainer1con2y3 {
     position: absolute;
-    top: 56px;
-    left: 113px;
-    width: 640px;
-    height: 360px;
+    top: 100px;
+    left: 300px;
+    width: 550px;
+    height: 310px;
     border-radius: 5px;
     margin: 7px 7px;
     border: 8px solid rgba(255, 255, 255, 0.8);
@@ -112,10 +142,10 @@ h1 {
 
 .videocontainer2con3 {
     position: absolute;
-    top: 56px;
-    left: 113px;
-    width: 640px;
-    height: 360px;
+    top: 100px;
+    left: 300px;
+    width: 550px;
+    height: 310px;
     border-radius: 5px;
     margin: 7px 7px;
     border: 8px solid rgba(255, 255, 255, 0.8);
@@ -124,10 +154,10 @@ h1 {
 
 .videocontainer2con1 {
     position: absolute;
-    top: 472px;
-    left: 113px;
-    width: 640px;
-    height: 360px;
+    top: 450px;
+    left: 300px;
+    width: 550px;
+    height: 310px;
     border-radius: 5px;
     margin: 7px 7px;
     border: 8px solid rgba(255, 255, 255, 0.8);
@@ -136,12 +166,19 @@ h1 {
 
 .videocontainer3con1y2 {
     position: absolute;
-    top: 472px;
-    left: 113px;
-    width: 640px;
-    height: 360px;
+    top: 450px;
+    left: 300px;
+    width: 550px;
+    height: 310px;
     border-radius: 5px;
     margin: 7px 7px;
     border: 8px solid rgba(255, 255, 255, 0.8);
     box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 5);
+}
+
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
 }
