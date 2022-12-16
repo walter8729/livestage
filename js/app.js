@@ -262,45 +262,6 @@ function cargarBgAjax() {
 
 
 
-
-
-
-
-
-function cargarBgFecth() {
-
-    const fileextension = ".mp4";
-    let filename = "";
-    let fileList = [];
-
-    fetch("/videobg")
-        .then((response) => response)
-        .then((data) => {
-            // find("a:contains(" + fileextension + ")").each(function () {
-
-            //     filename = this.href.replace(window.location.host, "").replace("http:///", "");
-            //     fileList.push(filename);
-            // });
-            console.log(data);
-
-
-
-        })
-        .catch(console.error);
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
 addEventListener("keydown", (evento) => {
     let list = OvenPlayer.getPlayerList();
 
