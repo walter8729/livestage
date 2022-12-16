@@ -1,10 +1,60 @@
 OvenPlayer.debug(false);
 
+let listabg = cargarVideoBackground();
 
 
-let listabg = cargarBgAjax();
 
-let actualbg = 0;
+/**
+ * Metodo que manejará la lectura y de creacion de playlist 
+ * de videos que esten almacenados en la carpeta videobg.
+ * Una vez listo la lista, reproducirá el primer video; muteado y loopeado.
+ * Con la tecla 'N' se reproducira el siguiente video en la lista, llegado al 
+ * ultimo elemento se regresa al principio de la lista.
+ */
+
+function cargarVideoBackground() {
+    const dir = "/videobg";
+    const fileExtension = ".mp4";
+    let actualbg = 0;
+    let fileList = [];
+    $.ajax({
+        //Devolvera todos los elementos de la carpeta, si es que esta navegable.
+        url: dir,
+        success: function (data) {
+            // Filtramos los anchor's con contenido y extencion. iteramos 
+            // para borrar la direccion del host y el http
+            $(data).find("a:contains(" + fileExtension + ")").each(function () {
+                let filename = this.href.replace(window.location.host, "").replace("http:///", "");
+                fileList.push(filename);
+            });
+            console.log(`Se han encontrado los siguientes backgrounds: ${fileList}`)
+            $(".videobg").attr({
+                "src": fileList[actualbg],
+                "poster": "./rw.png",
+                "autoplay": "autoplay",
+                "muted": "muted",
+                "loop": "loop"
+            });
+            $(document).keydown(function (event) {
+                if (event.which == 78) {
+                    actualbg++
+                    if (actualbg == fileList.length) {
+                        actualbg = 0;
+                    }
+                    $(".videobg").attr({
+                        "src": fileList[actualbg],
+                        "poster": "./rw.png",
+                        "autoplay": "autoplay",
+                        "muted": "muted",
+                        "loop": "loop"
+                    });
+                }
+
+            });
+        }
+    });
+}
+
 
 
 /** 
@@ -233,68 +283,6 @@ function removeAllPlayers() {
         OvenPlayer.getPlayerList()[i].remove();
     };
 }
-
-
-
-function cargarBgAjax() {
-
-    const dir = "/videobg";
-    const fileextension = ".mp4";
-    let filename = "";
-    let fileList = [];
-
-    $.ajax({
-        //This will retrieve the contents of the folder if the folder is configured as 'browsable'
-        url: dir,
-        success: function (data) {
-            // List all mp4 file names in the page
-            $(data).find("a:contains(" + fileextension + ")").each(function () {
-                filename = this.href.replace(window.location.host, "").replace("http:///", "");
-                fileList.push(filename);
-            });
-        }
-    });
-
-    return fileList;
-}
-
-
-
-
-
-
-
-
-
-
-function cargarBgFecth() {
-
-    const fileextension = ".mp4";
-    let filename = "";
-    let fileList = [];
-
-    fetch("/videobg")
-        .then((response) => response)
-        .then((data) => {
-            // find("a:contains(" + fileextension + ")").each(function () {
-
-            //     filename = this.href.replace(window.location.host, "").replace("http:///", "");
-            //     fileList.push(filename);
-            // });
-            console.log(data);
-
-
-
-        })
-        .catch(console.error);
-
-}
-
-
-
-
-
-
 
 
 
