@@ -1,6 +1,6 @@
 OvenPlayer.debug(false);
 
-let listabg = cargarVideoBackground();
+let listabg = cargarVideoBackgroundPHP  ();
 
 
 
@@ -54,6 +54,63 @@ function cargarVideoBackground() {
         }
     });
 }
+
+
+
+
+function cargarVideoBackgroundPHP() {
+    const dir = "getbackground.php";
+    const fileExtension = ".mp4";
+    let actualbg = 0;
+    let fileList = [];
+    $.ajax({
+        //Devolvera todos los elementos de la carpeta, si es que esta navegable.
+        url: dir,
+        success: function (data) {
+            data.split(",").forEach(element => {
+                if(element){
+                    fileList.push(element);
+                }
+            });
+
+            console.log(`Se han encontrado los siguientes backgrounds: ${fileList}`)
+            $(".videobg").attr({
+                "src": fileList[actualbg],
+                "poster": "./rw.png",
+                "autoplay": "autoplay",
+                "muted": "muted",
+                "loop": "loop"
+            });
+            $(document).keydown(function (event) {
+                if (event.which == 78) {
+                    actualbg++
+                    if (actualbg == fileList.length) {
+                        actualbg = 0;
+                    }
+                    $(".videobg").attr({
+                        "src": fileList[actualbg],
+                        "poster": "./rw.png",
+                        "autoplay": "autoplay",
+                        "muted": "muted",
+                        "loop": "loop"
+                    });
+                }
+
+            });
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -315,6 +372,7 @@ addEventListener("keydown", (evento) => {
     if (evento.keyCode == 48) {
         removeAllPlayers();
         removeAllVideoContainers();
+        document.getElementById("dummy").setAttribute("hidden", "hidden");
 
     };
 
@@ -330,6 +388,7 @@ addEventListener("keydown", (evento) => {
     //tecla f alfanumerica
     if (evento.keyCode == 70 && OvenPlayer.getPlayerByContainerId("reproductor1")) {
         OvenPlayer.getPlayerByContainerId("reproductor1").toggleFullScreen();
+        OvenPlayer.getPlayerByContainerId("reproductor1");
     };
 
 
