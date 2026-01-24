@@ -1,3 +1,6 @@
+// Configuración Global
+const STREAM_SERVER_IP = 'tu.servidor.streaming';
+
 OvenPlayer.debug(false);
 let listabg = cargarVideoBackgroundPHP();
 
@@ -62,48 +65,44 @@ function cargarVideoBackground() {
 
 
 
+let backgroundFileList = [];
+let actualBgIndex = 0;
+
+function actualizarBackground() {
+    if (backgroundFileList.length === 0) return;
+
+    const currentBg = backgroundFileList[actualBgIndex];
+
+    if (currentBg === "transparent") {
+        $(".videobg").hide();
+        console.log("Fondo transparente activado (Modo Overlay)");
+    } else {
+        $(".videobg").show();
+        $(".videobg").attr({
+            "src": currentBg,
+            "poster": "./rw.png",
+            "autoplay": "autoplay",
+            "muted": "muted",
+            "loop": "loop"
+        });
+    }
+}
+
 function cargarVideoBackgroundPHP() {
     const dir = "getbackground.php";
-    const fileExtension = ".mp4";
-    let actualbg = 0;
-    let fileList = [];
     $.ajax({
-        //Devolvera todos los elementos de la carpeta, si es que esta navegable.
         url: dir,
         success: function (data) {
-            data.split(",").forEach(element => {
-                if (element) {
-                    fileList.push(element);
-                }
-            });
+            // Obtenemos los videos y añadimos "transparent" al principio de la lista
+            backgroundFileList = data.split(",").filter(Boolean);
+            backgroundFileList.unshift("transparent");
 
-            console.log(`Se han encontrado los siguientes backgrounds: ${fileList}`)
-            $(".videobg").attr({
-                "src": fileList[actualbg],
-                "poster": "./rw.png",
-                "autoplay": "autoplay",
-                "muted": "muted",
-                "loop": "loop"
-            });
-            $(document).keydown(function (event) {
-                if (event.which == 78) {
-                    actualbg++
-                    if (actualbg == fileList.length) {
-                        actualbg = 0;
-                    }
-                    $(".videobg").attr({
-                        "src": fileList[actualbg],
-                        "poster": "./rw.png",
-                        "autoplay": "autoplay",
-                        "muted": "muted",
-                        "loop": "loop"
-                    });
-                }
-
-            });
+            console.log(`Se han encontrado los siguientes backgrounds: ${backgroundFileList}`);
+            actualizarBackground();
         }
     });
 }
+
 
 
 
@@ -125,12 +124,12 @@ function cargarVideoBackgroundPHP() {
  */
 const movil_01 = [
     {
-        file: 'ws://192.168.1.51:3333/app/stream1',
+        file: `ws://${STREAM_SERVER_IP}:3333/app/stream1`,
         label: 'WebRTC M01',
         type: 'webrtc'
     },
     {
-        file: 'http://192.168.1.51/app/stream1/llhls.m3u8',
+        file: `http://${STREAM_SERVER_IP}/app/stream1/llhls.m3u8`,
         label: 'LLHLS M01',
         type: 'hls'
     }
@@ -138,12 +137,12 @@ const movil_01 = [
 
 const movil_02 = [
     {
-        file: 'ws://192.168.1.51:3333/app/stream2',
+        file: `ws://${STREAM_SERVER_IP}:3333/app/stream2`,
         label: 'WebRTC M02',
         type: 'webrtc'
     },
     {
-        file: 'http://192.168.1.51/app/stream2/llhls.m3u8',
+        file: `http://${STREAM_SERVER_IP}/app/stream2/llhls.m3u8`,
         label: 'LLHLS M02',
         type: 'hls'
     }
@@ -151,12 +150,12 @@ const movil_02 = [
 
 const movil_03 = [
     {
-        file: 'ws://192.168.1.51:3333/app/stream3',
+        file: `ws://${STREAM_SERVER_IP}:3333/app/stream3`,
         label: 'WebRTC M03',
         type: 'webrtc'
     },
     {
-        file: 'http://192.168.1.51/app/stream3/llhls.m3u8',
+        file: `http://${STREAM_SERVER_IP}/app/stream3/llhls.m3u8`,
         label: 'LLHLS M03',
         type: 'hls'
     }
@@ -164,12 +163,12 @@ const movil_03 = [
 
 const movil_04 = [
     {
-        file: 'ws://192.168.1.51:3333/app/stream4',
+        file: `ws://${STREAM_SERVER_IP}:3333/app/stream4`,
         label: 'WebRTC M04',
         type: 'webrtc'
     },
     {
-        file: 'http://192.168.1.51/app/stream4/llhls.m3u8',
+        file: `http://${STREAM_SERVER_IP}/app/stream4/llhls.m3u8`,
         label: 'LLHLS M04',
         type: 'hls'
     }
@@ -177,12 +176,12 @@ const movil_04 = [
 
 const movil_05 = [
     {
-        file: 'ws://192.168.1.51:3333/app/stream5',
+        file: `ws://${STREAM_SERVER_IP}:3333/app/stream5`,
         label: 'WebRTC M05',
         type: 'webrtc'
     },
     {
-        file: 'http://192.168.1.51/app/stream5/llhls.m3u8',
+        file: `http://${STREAM_SERVER_IP}/app/stream5/llhls.m3u8`,
         label: 'LLHLS M05',
         type: 'hls'
     }
@@ -190,12 +189,12 @@ const movil_05 = [
 
 const movil_06 = [
     {
-        file: 'ws://192.168.1.51:3333/app/stream6',
+        file: `ws://${STREAM_SERVER_IP}:3333/app/stream6`,
         label: 'WebRTC M06',
         type: 'webrtc'
     },
     {
-        file: 'http://192.168.1.51/app/stream6/llhls.m3u8',
+        file: `http://${STREAM_SERVER_IP}/app/stream6/llhls.m3u8`,
         label: 'LLHLS M06',
         type: 'hls'
     }
@@ -222,7 +221,7 @@ const playerWaterMark = {
  */
 const playerCommonSettings = {
     image: "rw.png",
-    autoStart: false,
+    autoStart: true,
     mute: true,
     showBigPlayButton: true,
     controls: true,
@@ -492,32 +491,119 @@ const tvLayouts = [
             { id: "videocontainer2", rid: "reproductor2", data: player2Data, pos: { t: 300, l: 50, w: 400, h: 225 } },
             { id: "videocontainer1", rid: "reproductor1", data: player1Data, pos: { t: 550, l: 50, w: 400, h: 225 } }
         ]
+    },
+    // --- LAYOUTS 36-70 (CH 4-5-6) ---
+    { name: "CH4 FULL", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 0, l: 0, w: 1920, h: 1080 } }] },
+    { name: "CH5 FULL", cams: [{ id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 0, l: 0, w: 1920, h: 1080 } }] },
+    { name: "CH6 FULL", cams: [{ id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 0, l: 0, w: 1920, h: 1080 } }] },
+    { name: "SPLIT 4-5 V", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 270, l: 0, w: 960, h: 540 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 270, l: 960, w: 960, h: 540 } }] },
+    { name: "SPLIT 4-5 H", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 0, l: 480, w: 960, h: 540 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 540, l: 480, w: 960, h: 540 } }] },
+    { name: "PiP 4-5 BR", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 0, l: 0, w: 1920, h: 1080 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 750, l: 1380, w: 500, h: 281 } }] },
+    { name: "PiP 5-4 BR", cams: [{ id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 0, l: 0, w: 1920, h: 1080 } }, { id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 750, l: 1380, w: 500, h: 281 } }] },
+    { name: "SPLIT 4-6 V", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 270, l: 0, w: 960, h: 540 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 270, l: 960, w: 960, h: 540 } }] },
+    { name: "SPLIT 4-6 H", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 0, l: 480, w: 960, h: 540 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 540, l: 480, w: 960, h: 540 } }] },
+    { name: "PiP 4-6 BL", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 0, l: 0, w: 1920, h: 1080 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 750, l: 40, w: 500, h: 281 } }] },
+    { name: "PiP 6-4 BL", cams: [{ id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 0, l: 0, w: 1920, h: 1080 } }, { id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 750, l: 40, w: 500, h: 281 } }] },
+    { name: "SPLIT 5-6 V", cams: [{ id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 270, l: 0, w: 960, h: 540 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 270, l: 960, w: 960, h: 540 } }] },
+    { name: "SPLIT 5-6 H", cams: [{ id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 0, l: 480, w: 960, h: 540 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 540, l: 480, w: 960, h: 540 } }] },
+    { name: "SBS FOCUS 5", cams: [{ id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 100, l: 100, w: 800, h: 450 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 500, l: 1000, w: 800, h: 450 } }] },
+    { name: "OVER-UNDER 6-5", cams: [{ id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 50, l: 500, w: 700, h: 394 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 550, l: 700, w: 700, h: 394 } }] },
+    { name: "TRI-MOSAIC 2", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 100, l: 50, w: 800, h: 450 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 100, l: 1050, w: 800, h: 450 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 600, l: 560, w: 800, h: 450 } }] },
+    { name: "NEWS FOCUS 4", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 40, l: 100, w: 1200, h: 675 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 40, l: 1350, w: 500, h: 281 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 360, l: 1350, w: 500, h: 281 } }] },
+    { name: "NEWS FOCUS 5", cams: [{ id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 40, l: 620, w: 1200, h: 675 } }, { id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 40, l: 70, w: 500, h: 281 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 360, l: 70, w: 500, h: 281 } }] },
+    { name: "TRIPLE STACK 4L", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 50, l: 50, w: 500, h: 281 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 380, l: 50, w: 500, h: 281 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 710, l: 50, w: 500, h: 281 } }] },
+    { name: "TRIPLE STACK 4R", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 50, l: 1370, w: 500, h: 281 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 380, l: 1370, w: 500, h: 281 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 710, l: 1370, w: 500, h: 281 } }] },
+    { name: "BIG CENTER PiP (4)", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 150, l: 360, w: 1200, h: 675 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 150, l: 40, w: 300, h: 169 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 150, l: 1580, w: 300, h: 169 } }] },
+    { name: "THE WALL 2", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 200, l: 50, w: 580, h: 326 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 200, l: 670, w: 580, h: 326 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 200, l: 1290, w: 580, h: 326 } }] },
+    { name: "SYMMETRIC 4A", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 50, l: 50, w: 900, h: 506 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 50, l: 970, w: 900, h: 506 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 600, l: 510, w: 900, h: 506 } }] },
+    { name: "SYMMETRIC 4B", cams: [{ id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 50, l: 510, w: 900, h: 506 } }, { id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 600, l: 50, w: 900, h: 506 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 600, l: 970, w: 900, h: 506 } }] },
+    { name: "CCTV GRID 4", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 0, l: 0, w: 960, h: 540 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 0, l: 960, w: 960, h: 540 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 540, l: 0, w: 960, h: 540 } }] },
+    { name: "ACTION VIEW 4", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 30, l: 30, w: 1300, h: 731 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 400, l: 1360, w: 530, h: 298 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 710, l: 1360, w: 530, h: 298 } }] },
+    { name: "TOWER 4", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 50, l: 50, w: 1000, h: 563 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 50, l: 1100, w: 770, h: 433 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 550, l: 1100, w: 770, h: 433 } }] },
+    { name: "TOWER 5", cams: [{ id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 50, l: 870, w: 1000, h: 563 } }, { id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 50, l: 50, w: 770, h: 433 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 550, l: 50, w: 770, h: 433 } }] },
+    { name: "PANORAMA 4", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 300, l: 20, w: 600, h: 337 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 300, l: 660, w: 600, h: 337 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 300, l: 1300, w: 600, h: 337 } }] },
+    { name: "OVERLAY EXTREME 4", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 0, l: 0, w: 1920, h: 1080 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 50, l: 50, w: 400, h: 225 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 50, l: 1470, w: 400, h: 225 } }] },
+    { name: "CH4 FOCUS L", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 100, l: 50, w: 1400, h: 788 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 100, l: 1500, w: 380, h: 214 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 350, l: 1500, w: 380, h: 214 } }] },
+    { name: "CH5 FOCUS C", cams: [{ id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 50, l: 260, w: 1400, h: 788 } }, { id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 860, l: 260, w: 680, h: 383 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 860, l: 980, w: 680, h: 383 } }] },
+    { name: "COMBO 4-6 A", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 50, l: 50, w: 600, h: 337 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 50, l: 700, w: 1100, h: 618 } }] },
+    { name: "COMBO 4-6 B", cams: [{ id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 400, l: 50, w: 1100, h: 618 } }, { id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 50, l: 1200, w: 600, h: 337 } }] },
+    { name: "COMBO 4-6 C", cams: [{ id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 550, l: 50, w: 400, h: 225 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 300, l: 50, w: 400, h: 225 } }, { id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 550, l: 50, w: 400, h: 225 } }] },
+    // --- MIXED LAYOUTS (CH 1-6) ---
+    { name: "MIX 1-2-4", cams: [{ id: "videocontainer1", rid: "reproductor1", data: player1Data, pos: { t: 100, l: 50, w: 800, h: 450 } }, { id: "videocontainer2", rid: "reproductor2", data: player2Data, pos: { t: 100, l: 1050, w: 800, h: 450 } }, { id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 600, l: 560, w: 800, h: 450 } }] },
+    { name: "MIX 3-5-6", cams: [{ id: "videocontainer3", rid: "reproductor3", data: player3Data, pos: { t: 100, l: 50, w: 800, h: 450 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 100, l: 1050, w: 800, h: 450 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 600, l: 560, w: 800, h: 450 } }] },
+    { name: "MIX 1-3-5", cams: [{ id: "videocontainer1", rid: "reproductor1", data: player1Data, pos: { t: 100, l: 50, w: 800, h: 450 } }, { id: "videocontainer3", rid: "reproductor3", data: player3Data, pos: { t: 100, l: 1050, w: 800, h: 450 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 600, l: 560, w: 800, h: 450 } }] },
+    { name: "MIX 2-4-6", cams: [{ id: "videocontainer2", rid: "reproductor2", data: player2Data, pos: { t: 100, l: 50, w: 800, h: 450 } }, { id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 100, l: 1050, w: 800, h: 450 } }, { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 600, l: 560, w: 800, h: 450 } }] },
+    { name: "NEWS 1-4-5", cams: [{ id: "videocontainer1", rid: "reproductor1", data: player1Data, pos: { t: 40, l: 100, w: 1200, h: 675 } }, { id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 40, l: 1350, w: 500, h: 281 } }, { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 360, l: 1350, w: 500, h: 281 } }] },
+    { name: "NEWS 4-2-3", cams: [{ id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 40, l: 100, w: 1200, h: 675 } }, { id: "videocontainer2", rid: "reproductor2", data: player2Data, pos: { t: 40, l: 1350, w: 500, h: 281 } }, { id: "videocontainer3", rid: "reproductor3", data: player3Data, pos: { t: 360, l: 1350, w: 500, h: 281 } }] },
+    {
+        name: "CCTV 6 CHANNELS", cams: [
+            { id: "videocontainer1", rid: "reproductor1", data: player1Data, pos: { t: 180, l: 0, w: 640, h: 360 } },
+            { id: "videocontainer2", rid: "reproductor2", data: player2Data, pos: { t: 180, l: 640, w: 640, h: 360 } },
+            { id: "videocontainer3", rid: "reproductor3", data: player3Data, pos: { t: 180, l: 1280, w: 640, h: 360 } },
+            { id: "videocontainer4", rid: "reproductor4", data: player4Data, pos: { t: 540, l: 0, w: 640, h: 360 } },
+            { id: "videocontainer5", rid: "reproductor5", data: player5Data, pos: { t: 540, l: 640, w: 640, h: 360 } },
+            { id: "videocontainer6", rid: "reproductor6", data: player6Data, pos: { t: 540, l: 1280, w: 640, h: 360 } }
+        ]
     }
 ];
 
-// Corregir h en el layout index 26 que calculé mal a mano
-tvLayouts[26].cams[1].pos.h = Math.round(tvLayouts[26].cams[1].pos.w / ar);
-tvLayouts[26].cams[2].pos.h = Math.round(tvLayouts[26].cams[2].pos.w / ar);
+// Normalizar todos los layouts para asegurar 16:9 estricto basado en el ancho (w)
+for (const layout of tvLayouts) {
+    for (const cam of layout.cams) {
+        // Calcula la altura (h) basándose en el ancho (w) para asegurar la relación de aspecto 16:9 (ar)
+        cam.pos.h = Math.round(cam.pos.w / ar);
+    }
+}
+
 
 function applyTVLayout(index) {
-    removeAllPlayers();
-    removeAllColorsContainers();
-    removeAllVideoContainers();
-
     const layout = tvLayouts[index];
-    showLayoutNotification(layout.name + " (" + (index + 1) + "/30)");
+    const ctnr = document.getElementById("contenedorPrincipal");
+    const newCamRids = layout.cams.map(c => c.rid);
 
+    // 1. Eliminar reproductores que NO están en el nuevo layout
+    const currentPlayers = OvenPlayer.getPlayerList();
+    for (let i = currentPlayers.length - 1; i >= 0; i--) {
+        const p = currentPlayers[i];
+        const rid = p.getContainerId();
+        if (!newCamRids.includes(rid)) {
+            const container = document.getElementById(rid).parentElement;
+            p.remove();
+            if (container) container.remove();
+        }
+    }
+
+    showLayoutNotification(layout.name + " (" + (index + 1) + "/" + tvLayouts.length + ")");
+
+    // 2. Procesar canales del nuevo layout (Actualizar o Crear)
     layout.cams.forEach(cam => {
-        // Establecer ajustes de persistencia ANTES de crear
+        // Guardar ajustes de posición para este layout
         layoutSettings[cam.id] = {
             top: cam.pos.t + "px",
             left: cam.pos.l + "px",
             width: cam.pos.w + "px",
             height: cam.pos.h + "px"
         };
-        createrVideoContainer(cam.id, cam.rid, cam.data);
+
+        const existingPlayer = OvenPlayer.getPlayerByContainerId(cam.rid);
+
+        if (existingPlayer) {
+            // REUTILIZAR: Solo mover y redimensionar el contenedor existente
+            const vc = document.getElementById(cam.rid).parentElement;
+            const s = layoutSettings[cam.id];
+            vc.style.top = s.top;
+            vc.style.left = s.left;
+            vc.style.width = s.width;
+            vc.style.height = s.height;
+            // Aseguramos que la clase de identificación sea la correcta
+            vc.className = cam.id;
+        } else {
+            // CREAR: Si no existe, lo instanciamos
+            createrVideoContainer(cam.id, cam.rid, cam.data);
+        }
     });
 }
+
 
 function showLayoutNotification(text) {
     let indicator = document.getElementById("layoutIndicator");
@@ -581,35 +667,52 @@ function createrVideoContainer(nombreContainer, nombreReproductor, fuenteReprodu
     //creamos la instancia del reproductor en el wrapper
     makePlayer(nombreReproductor, fuenteReproductor);
 
-    // Añadir el handle de redimensionado
-    const handle = document.createElement('div');
-    handle.className = 'videocontainer-handle';
-    vc1.appendChild(handle);
+    // Añadir los 4 handles de redimensionado
+    const corners = ['br', 'bl', 'tr', 'tl'];
+    corners.forEach(corner => {
+        const handle = document.createElement('div');
+        handle.className = `videocontainer-handle ${corner}`;
+        vc1.appendChild(handle);
+    });
 
     // Inicializar interactividad (mover y redimensionar)
     console.log("Inicializando interactividad para: " + nombreContainer);
     initInteractable(vc1);
 }
 
+/**
+ * Inicializa la interactividad (arrastre y redimensionado) para un elemento,
+ * manteniendo una relación de aspecto de 16:9.
+ * 
+ * @param {HTMLElement} el - El elemento que se hará interactivo.
+ */
 function initInteractable(el) {
     let isDragging = false;
     let isResizing = false;
+    let currentHandle = null;
     let startX, startY, startWidth, startHeight, startLeft, startTop;
     const aspectRatio = 16 / 9;
 
     el.addEventListener('mousedown', function (e) {
         if (el.classList.contains('locked')) return;
 
+        // Quitar foco de otros y poner en este
+        document.querySelectorAll('.videocontainer.focused').forEach(f => f.classList.remove('focused'));
+        el.classList.add('focused');
+
         if (e.target.classList.contains('videocontainer-handle')) {
             isResizing = true;
+            el.classList.add('resizing');
+            currentHandle = e.target;
             startX = e.clientX;
             startY = e.clientY;
-            startWidth = parseInt(document.defaultView.getComputedStyle(el).width, 10);
-            startHeight = parseInt(document.defaultView.getComputedStyle(el).height, 10);
+            startWidth = el.offsetWidth;
+            startHeight = el.offsetHeight;
+            startLeft = el.offsetLeft;
+            startTop = el.offsetTop;
             e.preventDefault();
+            e.stopPropagation();
         } else {
-            // Dragging only if clicking the border/background, not the player itself if possible
-            // But OvenPlayer might swallow clicks. Let's assume clicking the container works.
             isDragging = true;
             startX = e.clientX;
             startY = e.clientY;
@@ -620,37 +723,117 @@ function initInteractable(el) {
 
     document.addEventListener('mousemove', function (e) {
         if (isDragging) {
-            const dx = e.clientX - startX;
-            const dy = e.clientY - startY;
-            el.style.left = (startLeft + dx) + 'px';
-            el.style.top = (startTop + dy) + 'px';
+            let newLeft = startLeft + (e.clientX - startX);
+            let newTop = startTop + (e.clientY - startY);
+            const width = el.offsetWidth;
+            const height = el.offsetHeight;
+
+            if (newLeft < 0) newLeft = 0;
+            if (newTop < 0) newTop = 0;
+            if (newLeft + width > 1920) newLeft = 1920 - width;
+            if (newTop + height > 1080) newTop = 1080 - height;
+
+            el.style.left = newLeft + 'px';
+            el.style.top = newTop + 'px';
         } else if (isResizing) {
             const dx = e.clientX - startX;
-            // Resizing symmetrically (maintaining aspect ratio)
-            let newWidth = startWidth + dx;
+            const dy = e.clientY - startY;
+            let newWidth, newHeight, newLeft, newTop;
 
-            // Establecer un ancho mínimo para no deformar el aspect ratio
-            if (newWidth < 200) newWidth = 200;
+            if (currentHandle.classList.contains('br')) {
+                newWidth = startWidth + dx;
+                if (newWidth < 200) newWidth = 200;
+                newHeight = Math.round(newWidth / aspectRatio);
 
-            const newHeight = newWidth / aspectRatio;
+                if (startLeft + newWidth > 1920) {
+                    newWidth = 1920 - startLeft;
+                    newHeight = Math.round(newWidth / aspectRatio);
+                }
+                if (startTop + newHeight > 1080) {
+                    newHeight = 1080 - startTop;
+                    newWidth = Math.round(newHeight * aspectRatio);
+                }
+                el.style.width = newWidth + 'px';
+                el.style.height = newHeight + 'px';
+            } else if (currentHandle.classList.contains('bl')) {
+                newWidth = startWidth - dx;
+                if (newWidth < 200) newWidth = 200;
+                newHeight = Math.round(newWidth / aspectRatio);
+                newLeft = startLeft + (startWidth - newWidth);
 
-            el.style.width = newWidth + 'px';
-            el.style.height = newHeight + 'px';
+                if (newLeft < 0) {
+                    newLeft = 0;
+                    newWidth = startLeft + startWidth;
+                    newHeight = Math.round(newWidth / aspectRatio);
+                }
+                if (startTop + newHeight > 1080) {
+                    newHeight = 1080 - startTop;
+                    newWidth = Math.round(newHeight * aspectRatio);
+                    newLeft = startLeft + (startWidth - newWidth);
+                }
+                el.style.left = newLeft + 'px';
+                el.style.width = newWidth + 'px';
+                el.style.height = newHeight + 'px';
+            } else if (currentHandle.classList.contains('tr')) {
+                newWidth = startWidth + dx;
+                if (newWidth < 200) newWidth = 200;
+                newHeight = Math.round(newWidth / aspectRatio);
+                newTop = startTop + (startHeight - newHeight);
+
+                if (newTop < 0) {
+                    newTop = 0;
+                    newHeight = startTop + startHeight;
+                    newWidth = Math.round(newHeight * aspectRatio);
+                }
+                if (startLeft + newWidth > 1920) {
+                    newWidth = 1920 - startLeft;
+                    newHeight = Math.round(newWidth / aspectRatio);
+                    newTop = startTop + (startHeight - newHeight);
+                }
+                el.style.top = newTop + 'px';
+                el.style.width = newWidth + 'px';
+                el.style.height = newHeight + 'px';
+            } else if (currentHandle.classList.contains('tl')) {
+                newWidth = startWidth - dx;
+                if (newWidth < 200) newWidth = 200;
+                newHeight = Math.round(newWidth / aspectRatio);
+                newLeft = startLeft + (startWidth - newWidth);
+                newTop = startTop + (startHeight - newHeight);
+
+                if (newLeft < 0) {
+                    newLeft = 0;
+                    newWidth = startLeft + startWidth;
+                    newHeight = Math.round(newWidth / aspectRatio);
+                    newTop = startTop + (startHeight - newHeight);
+                }
+                if (newTop < 0) {
+                    newTop = 0;
+                    newHeight = startTop + startHeight;
+                    newWidth = Math.round(newHeight * aspectRatio);
+                    newLeft = startLeft + (startWidth - newWidth);
+                }
+                el.style.left = newLeft + 'px';
+                el.style.top = newTop + 'px';
+                el.style.width = newWidth + 'px';
+                el.style.height = newHeight + 'px';
+            }
         }
     });
 
     document.addEventListener('mouseup', function () {
         if (isDragging || isResizing) {
-            // Guardar los ajustes actuales para la persistencia
-            layoutSettings[el.className.split(' ')[0]] = {
+            isDragging = false;
+            isResizing = false;
+            el.classList.remove('resizing');
+            // Guardar posición final en layoutSettings para persistencia durante cambios de layouts
+            const className = el.className.split(' ')[0];
+            layoutSettings[className] = {
                 top: el.style.top,
                 left: el.style.left,
                 width: el.style.width,
                 height: el.style.height
             };
         }
-        isDragging = false;
-        isResizing = false;
     });
 }
 
@@ -658,9 +841,6 @@ function initInteractable(el) {
 
 
 function removeAllVideoContainers() {
-    //por alguna extrana razon hay que llamar dos veces 
-    //al metodo para eliminar todos los elementos del arreglo.
-    removeAllPlayers();
     removeAllPlayers();
 
     removeElementsByClass("videocontainer1");
@@ -695,9 +875,10 @@ function removeElementsByClass(className) {
  * Ovenplayer de la lista del DOM.
  */
 function removeAllPlayers() {
-    for (let i = 0; i < OvenPlayer.getPlayerList().length; i++) {
-        OvenPlayer.getPlayerList()[i].remove();
-    };
+    const list = OvenPlayer.getPlayerList();
+    while (list.length > 0) {
+        list[0].remove();
+    }
 }
 
 
@@ -709,185 +890,52 @@ addEventListener("keydown", (evento) => {
     let list = OvenPlayer.getPlayerList();
 
 
-    //tecla h
-    if (evento.keyCode == 72) {
-        let element = document.getElementById("dummy");
-        let hidden = element.getAttribute("hidden");
 
-        if (hidden) {
-            element.removeAttribute("hidden");
 
+
+
+
+
+    // Función auxiliar para activar/desactivar canales individuales (Toggle)
+    function toggleChannel(num, data) {
+        const rid = `reproductor${num}`;
+        const cid = `videocontainer${num}`;
+        const existing = OvenPlayer.getPlayerByContainerId(rid);
+
+        if (existing) {
+            existing.remove();
+            removeElementsByClass(cid);
+            console.log(`Canal ${num} removido`);
         } else {
-            element.setAttribute("hidden", "hidden");
+            createrVideoContainer(cid, rid, data);
+            console.log(`Canal ${num} activado`);
         }
+    }
 
-    };
-
-
-
-
-
-    //tecla 0 alfanumerica 
+    // Tecla 0: Limpiar escena
     if (evento.keyCode == 48) {
-        removeAllPlayers();
         removeAllVideoContainers();
-        document.getElementById("dummy").setAttribute("hidden", "hidden");
+        console.log("Escena vaciada");
+    }
 
-    };
+    // Teclas 1 a 6: Toggle de canales
+    if (evento.keyCode == 49) toggleChannel(1, player1Data); // 1
+    if (evento.keyCode == 50) toggleChannel(2, player2Data); // 2
+    if (evento.keyCode == 51) toggleChannel(3, player3Data); // 3
+    if (evento.keyCode == 52) toggleChannel(4, player4Data); // 4
+    if (evento.keyCode == 53) toggleChannel(5, player5Data); // 5
+    if (evento.keyCode == 54) toggleChannel(6, player6Data); // 6
 
+    // Tecla F: Pantalla completa del canal con FOCO
+    if (evento.keyCode == 70) {
+        const focused = document.querySelector('.videocontainer.focused');
+        if (focused) {
+            const rid = focused.querySelector('[id^="reproductor"]').id;
+            const player = OvenPlayer.getPlayerByContainerId(rid);
+            if (player) player.toggleFullScreen();
+        }
+    }
 
-
-
-
-    //tecla 1 alfanumerica
-    if (evento.keyCode == 49 && !OvenPlayer.getPlayerByContainerId("reproductor1")) {
-        removeAllVideoContainers();
-        createrVideoContainer("videocontainer1", "reproductor1", player1Data);
-    };
-    //tecla f alfanumerica
-    if (evento.keyCode == 70 && OvenPlayer.getPlayerByContainerId("reproductor1")) {
-        OvenPlayer.getPlayerByContainerId("reproductor1").toggleFullScreen();
-        OvenPlayer.getPlayerByContainerId("reproductor1");
-    };
-
-
-
-
-
-    //tecla 2 alfanumerica
-    if (evento.keyCode == 50 && !OvenPlayer.getPlayerByContainerId("reproductor2")) {
-        removeAllVideoContainers();
-        createrVideoContainer("videocontainer2", "reproductor2", player2Data);
-    };
-
-    //tecla f alfanumerica
-    if (evento.keyCode == 70 && OvenPlayer.getPlayerByContainerId("reproductor2")) {
-        OvenPlayer.getPlayerByContainerId("reproductor2").toggleFullScreen();
-    };
-
-
-
-
-
-    //tecla 3 alfanumerica
-    if (evento.keyCode == 51 && !OvenPlayer.getPlayerByContainerId("reproductor3")) {
-        removeAllVideoContainers();
-        createrVideoContainer("videocontainer3", "reproductor3", player3Data);
-    };
-
-    //tecla f alfanumerica
-    if (evento.keyCode == 70 && OvenPlayer.getPlayerByContainerId("reproductor3")) {
-        OvenPlayer.getPlayerByContainerId("reproductor3").toggleFullScreen();
-    };
-
-
-
-
-
-    //tecla 4 alfanumerica
-    if (evento.keyCode == 52 && !OvenPlayer.getPlayerByContainerId("reproductor1con2y3")) {
-        removeAllVideoContainers();
-        createrVideoContainer("videocontainer1con2y3", "reproductor1con2y3", player1Data);
-        createrVideoContainer("videocontainer2con1", "reproductor2con1", player2Data);
-    };
-    //tecla 4 alfanumerica
-    if (evento.keyCode == 52 && OvenPlayer.getPlayerByContainerId("reproductor1con2y3")) {
-        OvenPlayer.getPlayerByContainerId("reproductor3con1y2").remove();
-        removeElementsByClass("videocontainer3con1y2");
-        createrVideoContainer("videocontainer2con1", "reproductor2con1", player2Data);
-    };
-
-
-
-
-
-    //tecla 5 alfanumerica
-    if (evento.keyCode == 53 && !OvenPlayer.getPlayerByContainerId("reproductor1con2y3")) {
-        removeAllVideoContainers();
-        createrVideoContainer("videocontainer1con2y3", "reproductor1con2y3", player1Data);
-        createrVideoContainer("videocontainer3con1y2", "reproductor3con1y2", player3Data);
-    };
-    //tecla 5 alfanumerica opcion 2
-    if (evento.keyCode == 53 && OvenPlayer.getPlayerByContainerId("reproductor1con2y3")) {
-        OvenPlayer.getPlayerByContainerId("reproductor2con1").remove();
-        removeElementsByClass("videocontainer2con1");
-        createrVideoContainer("videocontainer3con1y2", "reproductor3con1y2", player3Data);
-    };
-    //tecla 5 alfanumerica opcion 3
-    if (evento.keyCode == 53 && OvenPlayer.getPlayerByContainerId("reproductor2con3")) {
-        OvenPlayer.getPlayerByContainerId("reproductor2con3").remove();
-        removeElementsByClass("videocontainer2con3");
-        createrVideoContainer("videocontainer3con1y2", "reproductor3con1y2", player3Data);
-    };
-
-
-
-
-
-
-    //tecla 6 alfanumerica
-    if (evento.keyCode == 54 && !OvenPlayer.getPlayerByContainerId("reproductor2con3")) {
-        removeAllVideoContainers();
-        createrVideoContainer("videocontainer2con3", "reproductor2con3", player2Data);
-        createrVideoContainer("videocontainer3con1y2", "reproductor3con1y2", player3Data);
-    };
-
-    //tecla  alfanumerica opcion 2
-    if (evento.keyCode == 54 && OvenPlayer.getPlayerByContainerId("reproductor2con1")) {
-        OvenPlayer.getPlayerByContainerId("reproductor2con1").remove();
-        removeElementsByClass("videocontainer2con2");
-        createrVideoContainer("videocontainer3con1y2", "reproductor3con1y2", player3Data);
-    };
-
-    //tecla  alfanumerica opcion 3
-    if (evento.keyCode == 54 && OvenPlayer.getPlayerByContainerId("reproductor1con2y3")) {
-        OvenPlayer.getPlayerByContainerId("reproductor1con").remove();
-        removeElementsByClass("videocontainer2con2");
-        createrVideoContainer("videocontainer3con1y2", "reproductor3con1y2", player3Data);
-    };
-
-
-
-
-    //tecla 7 alfanumerica
-    if (evento.keyCode == 55 && !OvenPlayer.getPlayerByContainerId("reproductor4")) {
-        removeAllVideoContainers();
-        createrVideoContainer("videocontainer4", "reproductor4", player4Data);
-    };
-    //tecla f alfanumerica
-    if (evento.keyCode == 70 && OvenPlayer.getPlayerByContainerId("reproductor4")) {
-        OvenPlayer.getPlayerByContainerId("reproductor4").toggleFullScreen();
-    };
-
-
-
-
-
-    //tecla 8 alfanumerica
-    if (evento.keyCode == 56 && !OvenPlayer.getPlayerByContainerId("reproductor5")) {
-        removeAllVideoContainers();
-        createrVideoContainer("videocontainer5", "reproductor5", player5Data);
-    };
-
-    //tecla f alfanumerica
-    if (evento.keyCode == 70 && OvenPlayer.getPlayerByContainerId("reproductor5")) {
-        OvenPlayer.getPlayerByContainerId("reproductor5").toggleFullScreen();
-    };
-
-
-
-
-
-    //tecla 9 alfanumerica
-    if (evento.keyCode == 57 && !OvenPlayer.getPlayerByContainerId("reproductor6")) {
-        removeAllVideoContainers();
-        createrVideoContainer("videocontainer6", "reproductor6", player6Data);
-    };
-
-    //tecla f alfanumerica
-    if (evento.keyCode == 70 && OvenPlayer.getPlayerByContainerId("reproductor6")) {
-        OvenPlayer.getPlayerByContainerId("reproductor6").toggleFullScreen();
-    };
 
 
 
@@ -910,30 +958,56 @@ addEventListener("keydown", (evento) => {
         console.log("Movimiento bloqueado/desbloqueado");
     }
 
-    // Tecla R para resetear posición y tamaño original (SOLO de los canales visibles)
+    // Tecla R para resetear posición y tamaño original
     if (evento.keyCode == 82) {
-        const containers = document.querySelectorAll('[class^="videocontainer"]');
-        containers.forEach(c => {
-            // Obtener el nombre de la clase principal (ej: videocontainer1)
-            const className = c.className.split(' ')[0];
-            // Eliminar solo la configuración de este canal guardado
-            delete layoutSettings[className];
-
-            // Limpiar estilos visuales
-            c.style.top = '';
-            c.style.left = '';
-            c.style.width = '';
-            c.style.height = '';
-        });
-        console.log("Canales visibles reseteados");
+        if (currentLayoutIndex !== -1) {
+            // Si hay un layout de TV activo, limpiamos TODA la persistencia y lo re-aplicamos
+            layoutSettings = {};
+            applyTVLayout(currentLayoutIndex);
+            console.log("Layout de TV reseteado a valores originales");
+        } else {
+            // Si no hay un layout (canales individuales 1, 2, 3...), reseteamos los visibles
+            const containers = document.querySelectorAll('[class^="videocontainer"]');
+            containers.forEach(c => {
+                const className = c.className.split(' ')[0];
+                delete layoutSettings[className];
+                c.style.top = '';
+                c.style.left = '';
+                c.style.width = '';
+                c.style.height = '';
+            });
+            console.log("Canales individuales reseteados");
+        }
     }
 
-    // Tecla M para navegar entre los 20 Layouts de TV
-    if (evento.keyCode == 77) {
+    // Tecla N y M para navegar entre los Layouts de TV
+    if (evento.keyCode == 77) { // M - Siguiente
         currentLayoutIndex = (currentLayoutIndex + 1) % tvLayouts.length;
         applyTVLayout(currentLayoutIndex);
     }
+    if (evento.keyCode == 78) { // N - Anterior
+        currentLayoutIndex = (currentLayoutIndex - 1 + tvLayouts.length) % tvLayouts.length;
+        applyTVLayout(currentLayoutIndex);
+    }
+
+    // Teclas V y B para navegar entre los backgrounds
+    if (evento.keyCode == 86) { // V - Siguiente
+        if (backgroundFileList.length > 0) {
+            actualBgIndex = (actualBgIndex + 1) % backgroundFileList.length;
+            actualizarBackground();
+        }
+    }
+    if (evento.keyCode == 66) { // B - Anterior
+        if (backgroundFileList.length > 0) {
+            actualBgIndex = (actualBgIndex - 1 + backgroundFileList.length) % backgroundFileList.length;
+            actualizarBackground();
+        }
+    }
+
+
 });
+
+
 
 
 
