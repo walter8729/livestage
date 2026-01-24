@@ -1,5 +1,6 @@
 // Configuración Global
-const STREAM_SERVER_IP = 'tu.servidor.streaming';
+//const STREAM_SERVER_IP = 'tu.servidor.streaming';
+const STREAM_SERVER_IP = '192.168.1.51';
 
 OvenPlayer.debug(false);
 let listabg = cargarVideoBackgroundPHP();
