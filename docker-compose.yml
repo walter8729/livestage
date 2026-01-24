@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  web:
+    image: trafex/php-nginx
+    container_name: livestage-app
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/var/www/html
+    restart: unless-stopped
