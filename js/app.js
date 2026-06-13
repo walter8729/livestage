@@ -201,6 +201,46 @@ const movil_06 = [
     }
 ];
 
+const movil_07 = [
+    {
+        file: `ws://${STREAM_SERVER_IP}:3333/app/stream7`,
+        label: 'WebRTC M07',
+        type: 'webrtc'
+    },
+    {
+        file: `http://${STREAM_SERVER_IP}/app/stream7/llhls.m3u8`,
+        label: 'LLHLS M07',
+        type: 'hls'
+    }
+];
+
+const movil_08 = [
+    {
+        file: `ws://${STREAM_SERVER_IP}:3333/app/stream8`,
+        label: 'WebRTC M08',
+        type: 'webrtc'
+    },
+    {
+        file: `http://${STREAM_SERVER_IP}/app/stream8/llhls.m3u8`,
+        label: 'LLHLS M08',
+        type: 'hls'
+    }
+];
+
+const movil_09 = [
+    {
+        file: `ws://${STREAM_SERVER_IP}:3333/app/stream9`,
+        label: 'WebRTC M09',
+        type: 'webrtc'
+    },
+    {
+        file: `http://${STREAM_SERVER_IP}/app/stream9/llhls.m3u8`,
+        label: 'LLHLS M09',
+        type: 'hls'
+    }
+];
+
+
 
 /**
  *Definimos ubicacion de archivo para marca de agua 
@@ -262,6 +302,22 @@ const player5Data = Object.assign({
 const player6Data = Object.assign({
     title: "Móvil 06",
     sources: movil_06
+}, playerCommonSettings);
+
+
+const player7Data = Object.assign({
+    title: "Móvil 07",
+    sources: movil_07
+}, playerCommonSettings);
+
+const player8Data = Object.assign({
+    title: "Móvil 08",
+    sources: movil_08
+}, playerCommonSettings);
+
+const player9Data = Object.assign({
+    title: "Móvil 09",
+    sources: movil_09
 }, playerCommonSettings);
 
 // --- SISTEMA DE 30 LAYOUTS DE TV (ESTRICTO 16:9) ---
@@ -850,6 +906,9 @@ function removeAllVideoContainers() {
     removeElementsByClass("videocontainer4");
     removeElementsByClass("videocontainer5");
     removeElementsByClass("videocontainer6");
+    removeElementsByClass("videocontainer7");
+    removeElementsByClass("videocontainer8");
+    removeElementsByClass("videocontainer9");
 
     removeElementsByClass("videocontainer1con2y3");
     removeElementsByClass("videocontainer2con1");
@@ -926,6 +985,9 @@ addEventListener("keydown", (evento) => {
     if (evento.keyCode == 52) toggleChannel(4, player4Data); // 4
     if (evento.keyCode == 53) toggleChannel(5, player5Data); // 5
     if (evento.keyCode == 54) toggleChannel(6, player6Data); // 6
+    if (evento.keyCode == 55) toggleChannel(7, player7Data); // 7
+    if (evento.keyCode == 56) toggleChannel(8, player8Data); // 8
+    if (evento.keyCode == 57) toggleChannel(9, player9Data); // 9
 
     // Tecla F: Pantalla completa del canal con FOCO
     if (evento.keyCode == 70) {

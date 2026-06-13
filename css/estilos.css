@@ -111,7 +111,10 @@ img {
 .videocontainer3,
 .videocontainer4,
 .videocontainer5,
-.videocontainer6 {
+.videocontainer6,
+.videocontainer7,
+.videocontainer8,
+.videocontainer9 {
     /* resize: both; */
     overflow: hidden;
     position: absolute;
