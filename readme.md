@@ -81,7 +81,6 @@ La aplicación está diseñada para ser operada principalmente mediante el tecla
 ## 📂 Estructura del Proyecto
 
 - `index.html`: Aplicación principal (Multiviewer Interactivo).
-- `monitor.html`: Panel de monitoreo básico de 4 canales.
 - `js/app.js`: Lógica principal, definiciones de layouts y control de reproductores.
 - `js/ovenplayer.js`: OvenPlayer v0.10.23 (librería local).
 - `getbackground.php`: Script backend para listar dinámicamente los videos en la carpeta `videobg`.
