@@ -1049,6 +1049,8 @@ addEventListener("keydown", (evento) => {
 
     // Función auxiliar para activar/desactivar canales individuales (Toggle)
     function toggleChannel(num, data) {
+        if (helpVisible) toggleHelp();
+
         const rid = `reproductor${num}`;
         const cid = `videocontainer${num}`;
         const existing = OvenPlayer.getPlayerByContainerId(rid);
@@ -1061,7 +1063,6 @@ addEventListener("keydown", (evento) => {
             createrVideoContainer(cid, rid, data);
             console.log(`Canal ${num} activado`);
         }
-        if (helpVisible) toggleHelp();
     }
 
     // Tecla 0: Limpiar escena
