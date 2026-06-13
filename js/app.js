@@ -12,56 +12,6 @@ let layoutSettings = {};
 
 
 
-/**
- * Metodo que manejará la lectura y de creacion de playlist 
- * de videos que esten almacenados en la carpeta videobg.
- * Una vez listo la lista, reproducirá el primer video; muteado y loopeado.
- * Con la tecla 'N' se reproducira el siguiente video en la lista, llegado al 
- * ultimo elemento se regresa al principio de la lista.
- */
-
-function cargarVideoBackground() {
-    const dir = "/videobg";
-    const fileExtension = ".mp4";
-    let actualbg = 0;
-    let fileList = [];
-    $.ajax({
-        //Devolvera todos los elementos de la carpeta, si es que esta navegable.
-        url: dir,
-        success: function (data) {
-            // Filtramos los anchor's con contenido y extencion. iteramos 
-            // para borrar la direccion del host y el http
-            $(data).find("a:contains(" + fileExtension + ")").each(function () {
-                let filename = this.href.replace(window.location.host, "").replace("http:///", "");
-                fileList.push(filename);
-            });
-            console.log(`Se han encontrado los siguientes backgrounds: ${fileList}`)
-            $(".videobg").attr({
-                "src": fileList[actualbg],
-                "poster": "./rw.png",
-                "autoplay": "autoplay",
-                "muted": "muted",
-                "loop": "loop"
-            });
-            $(document).keydown(function (event) {
-                if (event.which == 78) {
-                    actualbg++
-                    if (actualbg == fileList.length) {
-                        actualbg = 0;
-                    }
-                    $(".videobg").attr({
-                        "src": fileList[actualbg],
-                        "poster": "./rw.png",
-                        "autoplay": "autoplay",
-                        "muted": "muted",
-                        "loop": "loop"
-                    });
-                }
-
-            });
-        }
-    });
-}
 
 
 
@@ -243,20 +193,6 @@ const movil_09 = [
 
 
 /**
- *Definimos ubicacion de archivo para marca de agua 
- asi como posicion tamanho y transparencia. 
- */
-const playerWaterMark = {
-    image: './live.jpg',
-    position: 'top-left',
-    y: '20px',
-    x: '20px',
-    width: '40px',
-    height: '30px',
-    opacity: 0.3
-};
-
-/**
  * Creamos unos ajustes y parametros que seran comunes 
  * en todos los reproductores
  */
@@ -267,8 +203,7 @@ const playerCommonSettings = {
     showBigPlayButton: true,
     controls: true,
     expandFullScreenUI: true,
-    autoFallback: false,
-    //waterMark: playerWaterMark
+    autoFallback: false
 }
 
 
@@ -681,9 +616,6 @@ function showLayoutNotification(text) {
     }, 1500);
 }
 
-function removeAllColorsContainers() {
-    // Función auxiliar opcional si hubiera otros contenedores
-}
 // ---------------------------------
 
 
@@ -916,12 +848,6 @@ function removeAllVideoContainers() {
     removeElementsByClass("videocontainer7");
     removeElementsByClass("videocontainer8");
     removeElementsByClass("videocontainer9");
-
-    removeElementsByClass("videocontainer1con2y3");
-    removeElementsByClass("videocontainer2con1");
-    removeElementsByClass("videocontainer3con1y2");
-
-    removeElementsByClass("videocontainer2con3");
 }
 
 
