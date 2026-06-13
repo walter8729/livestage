@@ -1104,9 +1104,11 @@ addEventListener("keydown", (evento) => {
         toggleHelp();
     }
 
-    // ESC: Cerrar overlays
+    // ESC: Cerrar overlays (solo si no estamos en fullscreen)
     if (evento.keyCode == 27) {
-        closeAllOverlays();
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+            closeAllOverlays();
+        }
     }
 
     // Tecla L para bloquear/desbloquear movimiento
