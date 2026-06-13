@@ -921,6 +921,9 @@ function updateFullscreenBtn() {
 createHelpOverlay();
 toggleHelp();
 
+// Clic en el fondo alterna pantalla completa
+document.querySelector('.videobg').addEventListener('click', toggleAppFullscreen);
+
 addEventListener("keydown", (evento) => {
     let list = OvenPlayer.getPlayerList();
 
