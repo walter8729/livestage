@@ -2,7 +2,7 @@
 
 ![LiveStage Banner](envivo.png)
 
-**LiveStage** es una potente plataforma web de monitoreo multiviewer diseñada para estaciones de televisión, productores de contenido y centros de operaciones de red (NOC). Permite la visualización simultánea de hasta 6 señales de video con ultra baja latencia, ofreciendo un control total sobre el diseño de pantalla y la interactividad.
+**LiveStage** es una potente plataforma web de monitoreo multiviewer diseñada para estaciones de televisión, productores de contenido y centros de operaciones de red (NOC). Permite la visualización simultánea de hasta 9 señales de video con ultra baja latencia, ofreciendo un control total sobre el diseño de pantalla y la interactividad.
 
 ---
 
