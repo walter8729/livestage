@@ -913,16 +913,23 @@ document.addEventListener('fullscreenchange', updateFullscreenBtn);
 document.addEventListener('webkitfullscreenchange', updateFullscreenBtn);
 function updateFullscreenBtn() {
     const fsBtn = document.getElementById('fsBtn');
-    if (!fsBtn) return;
-    fsBtn.classList.toggle('hidden', !!(document.fullscreenElement || document.webkitFullscreenElement));
+    if (fsBtn) fsBtn.classList.toggle('hidden', !!(document.fullscreenElement || document.webkitFullscreenElement));
+    const ft = document.getElementById('fullscreenToggle');
+    if (ft) ft.classList.toggle('visible', !document.fullscreenElement && !document.webkitFullscreenElement);
 }
 
 // Crear y mostrar ayuda al cargar
 createHelpOverlay();
 toggleHelp();
 
-// Clic en el fondo alterna pantalla completa
-document.querySelector('.videobg').addEventListener('dblclick', toggleAppFullscreen);
+// Botón flotante de pantalla completa (solo visible fuera de fullscreen)
+const fsToggle = document.createElement('div');
+fsToggle.id = 'fullscreenToggle';
+fsToggle.textContent = '[ ]';
+fsToggle.title = 'Pantalla completa';
+fsToggle.addEventListener('click', toggleAppFullscreen);
+document.body.appendChild(fsToggle);
+updateFullscreenBtn();
 
 addEventListener("keydown", (evento) => {
     let list = OvenPlayer.getPlayerList();

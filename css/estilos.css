@@ -280,3 +280,27 @@ img {
     font-size: 12px;
     margin-top: 12px;
 }
+
+/* --- FULLSCREEN TOGGLE BUTTON --- */
+#fullscreenToggle {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 9999;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.3s;
+    display: none;
+    line-height: 1;
+}
+#fullscreenToggle:hover {
+    background: rgba(255,152,0,0.85);
+}
+#fullscreenToggle.visible {
+    display: block;
+}
