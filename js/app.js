@@ -8,14 +8,6 @@ let listabg = cargarVideoBackgroundPHP();
 // Objeto para guardar las posiciones y tamaños personalizados de cada contenedor
 let layoutSettings = {};
 
-
-
-
-
-
-
-
-
 let backgroundFileList = [];
 let actualBgIndex = 0;
 
@@ -53,21 +45,6 @@ function cargarVideoBackgroundPHP() {
         }
     });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /** 
 *Definimos sources, para cada reproductor.
 *por ahora solo tiene uno, pero cada reproductor
@@ -190,8 +167,6 @@ const movil_09 = [
     }
 ];
 
-
-
 /**
  * Creamos unos ajustes y parametros que seran comunes 
  * en todos los reproductores
@@ -205,7 +180,6 @@ const playerCommonSettings = {
     expandFullScreenUI: true,
     autoFallback: false
 }
-
 
 //definimos los parametros unicos 
 //que tendra cada reproductor
@@ -239,7 +213,6 @@ const player6Data = Object.assign({
     sources: movil_06
 }, playerCommonSettings);
 
-
 const player7Data = Object.assign({
     title: "Móvil 07",
     sources: movil_07
@@ -257,7 +230,8 @@ const player9Data = Object.assign({
 
 // --- SISTEMA DE 30 LAYOUTS DE TV (ESTRICTO 16:9) ---
 let currentLayoutIndex = -1;
-const ar = 16 / 9;
+// Relación de aspecto 16:9 para asegurar que todos los layouts se ajusten a esta proporción
+const relacionDeAspecto = 16 / 9;
 
 const tvLayouts = [
     // --- SOLO (3) ---
@@ -543,11 +517,18 @@ const tvLayouts = [
 for (const layout of tvLayouts) {
     for (const cam of layout.cams) {
         // Calcula la altura (h) basándose en el ancho (w) para asegurar la relación de aspecto 16:9 (ar)
-        cam.pos.h = Math.round(cam.pos.w / ar);
+        cam.pos.h = Math.round(cam.pos.w / relacionDeAspecto);
     }
 }
 
-
+/**
+ * 
+ * Función principal para aplicar un layout de TV según el índice seleccionado.
+ * Esta función se encarga de eliminar reproductores que no están en el nuevo layout,
+ * reutilizar los que sí están (solo moviéndolos y redimensionándolos) y crear los nuevos
+ * que sean necesarios. Finalmente, reordena los contenedores en el DOM para reflejar el orden del layout.
+ * @param {*} index es el índice del layout seleccionado en el arreglo tvLayouts.
+ */
 function applyTVLayout(index) {
     const layout = tvLayouts[index];
     const ctnr = document.getElementById("contenedorPrincipal");
@@ -565,6 +546,7 @@ function applyTVLayout(index) {
         }
     }
 
+    // Mostrar notificación del layout aplicado
     showLayoutNotification(layout.name + " (" + (index + 1) + "/" + tvLayouts.length + ")");
 
     // 2. Procesar canales del nuevo layout (Actualizar o Crear)
@@ -601,7 +583,10 @@ function applyTVLayout(index) {
     });
 }
 
-
+/**
+ * Función para mostrar una notificación temporal en pantalla indicando el layout aplicado.
+ * @param {*} text 
+ */
 function showLayoutNotification(text) {
     let indicator = document.getElementById("layoutIndicator");
     if (!indicator) {
@@ -616,9 +601,6 @@ function showLayoutNotification(text) {
     }, 1500);
 }
 
-// ---------------------------------
-
-
 /** Creamos una funcion que recibira un id y un source y con ello creamos un nuevo reproductor.
  @param {String} id - Identificador del Wrapper donde incrustaremos el reproductor.
  @param {Objet} src - Lista de Objetos con la configuracion que tengra el reproductor.
@@ -626,8 +608,52 @@ function showLayoutNotification(text) {
 function makePlayer(id, src) {
     const player = OvenPlayer.create(id, src);
     console.log("Se creo el reproductor en elemento con id " + id);
-}
 
+    player.on('stateChanged', function (data) {
+        const container = document.getElementById(id);
+        if (!container) return;
+        const vc = container.parentElement;
+        if (!vc) return;
+        let led = vc.querySelector('.status-led');
+        if (!led) return;
+
+        const state = data.newState || data;
+        led.className = 'status-led';
+        led.dataset.state = state;
+
+        const tooltips = {
+            playing: 'Conectado',
+            loading: 'Cargando...',
+            error: 'Error de conexión',
+            idle: 'En espera',
+            paused: 'En pausa',
+            complete: 'Completado'
+        };
+        led.dataset.tooltip = tooltips[state] || state;
+
+        if (state === 'playing') {
+            led.classList.add('playing');
+            clearTimeout(led._hideTimeout);
+            led._hideTimeout = setTimeout(() => {
+                led.classList.add('fade');
+            }, 3000);
+        } else if (state === 'error') {
+            led.classList.add('error');
+            led.classList.remove('fade');
+        } else if (state === 'loading') {
+            led.classList.add('loading');
+            led.classList.remove('fade');
+        } else if (state === 'idle') {
+            led.classList.add('idle');
+            led.classList.remove('fade');
+        } else if (state === 'paused') {
+            led.classList.add('paused');
+            led.classList.remove('fade');
+        }
+    });
+
+    return player;
+}
 
 
 /**
@@ -639,41 +665,48 @@ function makePlayer(id, src) {
  */
 function createrVideoContainer(nombreContainer, nombreReproductor, fuenteReproductor) {
     //creamos div donde sera el container
-    const vc1 = document.createElement('div');
-    vc1.className = nombreContainer + ' videocontainer';
+    const videoContainer = document.createElement('div');
+    videoContainer.className = nombreContainer + ' videocontainer';
     //creamos el wrapper del reproductor con su id
     const rp1 = document.createElement('div');
     rp1.id = nombreReproductor;
-    vc1.appendChild(rp1);//agrego el wrapper al videoContainer.
+    videoContainer.appendChild(rp1);//agrego el wrapper al videoContainer.
     //apunto al contenedor principal
     const ctnr = document.getElementById("contenedorPrincipal");
-    ctnr.appendChild(vc1);//agrego el videoConteiner al Contenedor principal
+    ctnr.appendChild(videoContainer);//agrego el videoConteiner al Contenedor principal
 
     // Aplicar ajustes guardados si existen
     if (layoutSettings[nombreContainer]) {
         const s = layoutSettings[nombreContainer];
-        vc1.style.top = s.top;
-        vc1.style.left = s.left;
-        vc1.style.width = s.width;
-        vc1.style.height = s.height;
+        videoContainer.style.top = s.top;
+        videoContainer.style.left = s.left;
+        videoContainer.style.width = s.width;
+        videoContainer.style.height = s.height;
     }
 
     //creamos la instancia del reproductor en el wrapper
     makePlayer(nombreReproductor, fuenteReproductor);
+
+    // LED de estado
+    const led = document.createElement('div');
+    led.className = 'status-led idle';
+    led.dataset.state = 'idle';
+    led.dataset.tooltip = 'En espera';
+    vc1.appendChild(led);
 
     // Añadir los 4 handles de redimensionado
     const corners = ['br', 'bl', 'tr', 'tl'];
     corners.forEach(corner => {
         const handle = document.createElement('div');
         handle.className = `videocontainer-handle ${corner}`;
-        vc1.appendChild(handle);
+        videoContainer.appendChild(handle);
     });
 
     // Inicializar interactividad (mover y redimensionar)
     console.log("Inicializando interactividad para: " + nombreContainer);
-    initInteractable(vc1);
+    initInteractable(videoContainer);
 
-    return vc1;
+    return videoContainer;
 }
 
 /**
@@ -687,7 +720,7 @@ function initInteractable(el) {
     let isResizing = false;
     let currentHandle = null;
     let startX, startY, startWidth, startHeight, startLeft, startTop;
-    const aspectRatio = 16 / 9;
+    const aspectRatio = relacionDeAspecto; // 16:9
 
     el.addEventListener('mousedown', function (e) {
         if (el.classList.contains('locked')) return;
@@ -874,10 +907,138 @@ function removeAllPlayers() {
     }
 }
 
+// --- OVERLAYS (STATS + HELP) ---
+let statsVisible = false;
+let helpVisible = false;
+let statsInterval = null;
 
+function createOverlays() {
+    if (!document.getElementById('statsOverlay')) {
+        const stats = document.createElement('div');
+        stats.id = 'statsOverlay';
+        stats.innerHTML = '<h2>Panel de Estad&iacute;sticas</h2><div id="statsContent"><table><thead><tr><th>Canal</th><th>Estado</th><th>Protocolo</th><th>Resoluci&oacute;n</th><th>FPS</th></tr></thead><tbody id="statsBody"></tbody></table></div><div class="close-hint">Presiona <b>I</b> para cerrar</div>';
+        document.body.appendChild(stats);
+    }
+    if (!document.getElementById('helpOverlay')) {
+        const help = document.createElement('div');
+        help.id = 'helpOverlay';
+        help.innerHTML = `
+            <h1>MAS TV</h1>
+            <div class="subtitle">LiveStage - Multiviewer &amp; Streaming Monitor</div>
+            <table>
+                <tr><th>Tecla</th><th>Acci&oacute;n</th></tr>
+                <tr><td>1 - 9</td><td>Activar / Desactivar canal</td></tr>
+                <tr><td>0</td><td>Limpiar escena</td></tr>
+                <tr><td>M / N</td><td>Siguiente / Anterior layout</td></tr>
+                <tr><td>V / B</td><td>Siguiente / Anterior fondo</td></tr>
+                <tr><td>L</td><td>Bloquear / Desbloquear canales</td></tr>
+                <tr><td>R</td><td>Resetear layout actual</td></tr>
+                <tr><td>F</td><td>Pantalla completa del canal con foco</td></tr>
+                <tr><td>I</td><td>Abrir / Cerrar panel de estad&iacute;sticas</td></tr>
+                <tr><td>H</td><td>Abrir / Cerrar esta ayuda</td></tr>
+                <tr><td>ESC</td><td>Cerrar overlays</td></tr>
+            </table>
+            <p style="color:#888;font-size:13px;margin-top:15px;">Hac&eacute; clic en un canal para darle foco. Arrastr&aacute; desde el centro para mover, us&aacute; las esquinas para redimensionar.</p>
+            <button class="fullscreen-btn" id="fsBtn" onclick="toggleAppFullscreen()">Pantalla Completa</button>
+            <div class="close-hint">Eleg&iacute; un canal (1-9) o layout (M/N) para empezar</div>
+        `;
+        document.body.appendChild(help);
+    }
+}
 
+function toggleStats() {
+    const el = document.getElementById('statsOverlay');
+    if (!el) return;
+    statsVisible = !statsVisible;
+    el.style.display = statsVisible ? 'block' : 'none';
+    if (statsVisible) {
+        updateStats();
+        statsInterval = setInterval(updateStats, 2000);
+    } else {
+        clearInterval(statsInterval);
+    }
+}
 
+function updateStats() {
+    const tbody = document.getElementById('statsBody');
+    if (!tbody) return;
+    const players = OvenPlayer.getPlayerList();
+    let html = '';
+    if (players.length === 0) {
+        html = '<tr><td colspan="5" style="text-align:center;color:#666;">Sin canales activos</td></tr>';
+    } else {
+        players.forEach(p => {
+            const rid = p.getContainerId();
+            const num = rid.replace('reproductor', '');
+            const source = p.getCurrentSource !== undefined ? p.getCurrentSource() : null;
+            const sources = p.getSources !== undefined ? p.getSources() : null;
+            const state = p.getState !== undefined ? p.getState() : '?';
+            const quality = p.getCurrentQuality !== undefined ? p.getCurrentQuality() : null;
+            const qLevels = p.getQualityLevels !== undefined ? p.getQualityLevels() : null;
+            const fps = p.getFramerate !== undefined ? p.getFramerate() : null;
+            const stateColors = { playing: 'green', loading: 'orange', error: 'red', idle: 'gray', paused: 'blue' };
+            const color = stateColors[state] || 'gray';
+            let protocol = '?';
+            if (sources && source !== null && sources[source]) {
+                protocol = sources[source].type || sources[source].label || '?';
+            }
+            let resolution = '-';
+            if (qLevels && qLevels.length > 0 && quality !== null && qLevels[quality]) {
+                const q = qLevels[quality];
+                resolution = q.width && q.height ? q.width + 'x' + q.height : (q.label || '-');
+            }
+            html += '<tr><td>M\u00f3vil ' + num + '</td><td><span class="stat-led" style="background:' + color + '"></span>' + state + '</td><td>' + protocol + '</td><td>' + resolution + '</td><td>' + (fps !== null ? fps : '-') + '</td></tr>';
+        });
+    }
+    tbody.innerHTML = html;
+}
 
+function toggleHelp() {
+    const el = document.getElementById('helpOverlay');
+    if (!el) return;
+    helpVisible = !helpVisible;
+    el.style.display = helpVisible ? 'block' : 'none';
+    if (helpVisible) {
+        const fsBtn = document.getElementById('fsBtn');
+        if (fsBtn) {
+            fsBtn.classList.toggle('hidden', !!(document.fullscreenElement || document.webkitFullscreenElement));
+        }
+    }
+}
+
+function closeAllOverlays() {
+    if (statsVisible) toggleStats();
+    if (helpVisible) toggleHelp();
+}
+
+function toggleAppFullscreen() {
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+        if (document.exitFullscreen) document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    } else {
+        const el = document.documentElement;
+        if (el.requestFullscreen) el.requestFullscreen();
+        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    }
+}
+
+document.addEventListener('fullscreenchange', updateFullscreenBtn);
+document.addEventListener('webkitfullscreenchange', updateFullscreenBtn);
+function updateFullscreenBtn() {
+    const fsBtn = document.getElementById('fsBtn');
+    if (!fsBtn) return;
+    const isFS = document.fullscreenElement || document.webkitFullscreenElement;
+    fsBtn.classList.toggle('hidden', !!isFS);
+}
+
+// Crear overlays al cargar
+createOverlays();
+
+// Mostrar ayuda en primera visita
+if (!localStorage.getItem('livestage_help_seen')) {
+    toggleHelp();
+    localStorage.setItem('livestage_help_seen', '1');
+}
 
 addEventListener("keydown", (evento) => {
     let list = OvenPlayer.getPlayerList();
@@ -903,6 +1064,7 @@ addEventListener("keydown", (evento) => {
             createrVideoContainer(cid, rid, data);
             console.log(`Canal ${num} activado`);
         }
+        if (helpVisible) toggleHelp();
     }
 
     // Tecla 0: Limpiar escena
@@ -932,17 +1094,19 @@ addEventListener("keydown", (evento) => {
         }
     }
 
+    // Tecla I: Panel de estadísticas
+    if (evento.keyCode == 73) {
+        toggleStats();
+    }
 
+    // Tecla H: Pantalla de ayuda
+    if (evento.keyCode == 72) {
+        toggleHelp();
+    }
 
-
-
-    console.log("Escuchando, la tecla del evento es: " + evento.keyCode);
-    console.log("La lista de players en el dom es: " + list);
-
-    for (let index = 0; index < list.length; index++) {
-        const element = list[index];
-        console.log("Elemento en la lista N: " + index + " ", element);
-
+    // ESC: Cerrar overlays
+    if (evento.keyCode == 27) {
+        closeAllOverlays();
     }
 
     // Tecla L para bloquear/desbloquear movimiento
@@ -980,10 +1144,12 @@ addEventListener("keydown", (evento) => {
     if (evento.keyCode == 77) { // M - Siguiente
         currentLayoutIndex = (currentLayoutIndex + 1) % tvLayouts.length;
         applyTVLayout(currentLayoutIndex);
+        if (helpVisible) toggleHelp();
     }
     if (evento.keyCode == 78) { // N - Anterior
         currentLayoutIndex = (currentLayoutIndex - 1 + tvLayouts.length) % tvLayouts.length;
         applyTVLayout(currentLayoutIndex);
+        if (helpVisible) toggleHelp();
     }
 
     // Teclas V y B para navegar entre los backgrounds
