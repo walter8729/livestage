@@ -608,54 +608,6 @@ function showLayoutNotification(text) {
 function makePlayer(id, src) {
     const player = OvenPlayer.create(id, src);
     console.log("Se creo el reproductor en elemento con id " + id);
-
-    try {
-        player.on('stateChanged', function (data) {
-            const container = document.getElementById(id);
-            if (!container) return;
-            const vc = container.parentElement;
-            if (!vc) return;
-            let led = vc.querySelector('.status-led');
-            if (!led) return;
-
-            const state = data.newState || data;
-            led.className = 'status-led';
-            led.dataset.state = state;
-
-            const tooltips = {
-                playing: 'Conectado',
-                loading: 'Cargando...',
-                error: 'Error de conexión',
-                idle: 'En espera',
-                paused: 'En pausa',
-                complete: 'Completado'
-            };
-            led.dataset.tooltip = tooltips[state] || state;
-
-            if (state === 'playing') {
-                led.classList.add('playing');
-                clearTimeout(led._hideTimeout);
-                led._hideTimeout = setTimeout(() => {
-                    led.classList.add('fade');
-                }, 3000);
-            } else if (state === 'error') {
-                led.classList.add('error');
-                led.classList.remove('fade');
-            } else if (state === 'loading') {
-                led.classList.add('loading');
-                led.classList.remove('fade');
-            } else if (state === 'idle') {
-                led.classList.add('idle');
-                led.classList.remove('fade');
-            } else if (state === 'paused') {
-                led.classList.add('paused');
-                led.classList.remove('fade');
-            }
-        });
-    } catch (e) {
-        console.warn("No se pudo suscribir a eventos del player:", e);
-    }
-
     return player;
 }
 
@@ -690,13 +642,6 @@ function createrVideoContainer(nombreContainer, nombreReproductor, fuenteReprodu
 
     //creamos la instancia del reproductor en el wrapper
     makePlayer(nombreReproductor, fuenteReproductor);
-
-    // LED de estado
-    const led = document.createElement('div');
-    led.className = 'status-led idle';
-    led.dataset.state = 'idle';
-    led.dataset.tooltip = 'En espera';
-    vc1.appendChild(led);
 
     // Añadir los 4 handles de redimensionado
     const corners = ['br', 'bl', 'tr', 'tl'];
@@ -911,90 +856,33 @@ function removeAllPlayers() {
     }
 }
 
-// --- OVERLAYS (STATS + HELP) ---
-let statsVisible = false;
+// --- HELP OVERLAY ---
 let helpVisible = false;
-let statsInterval = null;
 
-function createOverlays() {
-    if (!document.getElementById('statsOverlay')) {
-        const stats = document.createElement('div');
-        stats.id = 'statsOverlay';
-        stats.innerHTML = '<h2>Panel de Estad&iacute;sticas</h2><div id="statsContent"><table><thead><tr><th>Canal</th><th>Estado</th><th>Protocolo</th><th>Resoluci&oacute;n</th><th>FPS</th></tr></thead><tbody id="statsBody"></tbody></table></div><div class="close-hint">Presiona <b>I</b> para cerrar</div>';
-        document.body.appendChild(stats);
-    }
-    if (!document.getElementById('helpOverlay')) {
-        const help = document.createElement('div');
-        help.id = 'helpOverlay';
-        help.innerHTML = `
-            <h1>MAS TV</h1>
-            <div class="subtitle">LiveStage - Multiviewer &amp; Streaming Monitor</div>
-            <table>
-                <tr><th>Tecla</th><th>Acci&oacute;n</th></tr>
-                <tr><td>1 - 9</td><td>Activar / Desactivar canal</td></tr>
-                <tr><td>0</td><td>Limpiar escena</td></tr>
-                <tr><td>M / N</td><td>Siguiente / Anterior layout</td></tr>
-                <tr><td>V / B</td><td>Siguiente / Anterior fondo</td></tr>
-                <tr><td>L</td><td>Bloquear / Desbloquear canales</td></tr>
-                <tr><td>R</td><td>Resetear layout actual</td></tr>
-                <tr><td>F</td><td>Pantalla completa del canal con foco</td></tr>
-                <tr><td>I</td><td>Abrir / Cerrar panel de estad&iacute;sticas</td></tr>
-                <tr><td>H</td><td>Abrir / Cerrar esta ayuda</td></tr>
-                <tr><td>ESC</td><td>Cerrar overlays</td></tr>
-            </table>
-            <p style="color:#888;font-size:13px;margin-top:15px;">Hac&eacute; clic en un canal para darle foco. Arrastr&aacute; desde el centro para mover, us&aacute; las esquinas para redimensionar.</p>
-            <button class="fullscreen-btn" id="fsBtn" onclick="toggleAppFullscreen()">Pantalla Completa</button>
-            <div class="close-hint">Eleg&iacute; un canal (1-9) o layout (M/N) para empezar</div>
-        `;
-        document.body.appendChild(help);
-    }
-}
-
-function toggleStats() {
-    const el = document.getElementById('statsOverlay');
-    if (!el) return;
-    statsVisible = !statsVisible;
-    el.style.display = statsVisible ? 'block' : 'none';
-    if (statsVisible) {
-        updateStats();
-        statsInterval = setInterval(updateStats, 2000);
-    } else {
-        clearInterval(statsInterval);
-    }
-}
-
-function updateStats() {
-    const tbody = document.getElementById('statsBody');
-    if (!tbody) return;
-    const players = OvenPlayer.getPlayerList();
-    let html = '';
-    if (players.length === 0) {
-        html = '<tr><td colspan="5" style="text-align:center;color:#666;">Sin canales activos</td></tr>';
-    } else {
-        players.forEach(p => {
-            const rid = p.getContainerId();
-            const num = rid.replace('reproductor', '');
-            const source = p.getCurrentSource !== undefined ? p.getCurrentSource() : null;
-            const sources = p.getSources !== undefined ? p.getSources() : null;
-            const state = p.getState !== undefined ? p.getState() : '?';
-            const quality = p.getCurrentQuality !== undefined ? p.getCurrentQuality() : null;
-            const qLevels = p.getQualityLevels !== undefined ? p.getQualityLevels() : null;
-            const fps = p.getFramerate !== undefined ? p.getFramerate() : null;
-            const stateColors = { playing: 'green', loading: 'orange', error: 'red', idle: 'gray', paused: 'blue' };
-            const color = stateColors[state] || 'gray';
-            let protocol = '?';
-            if (sources && source !== null && sources[source]) {
-                protocol = sources[source].type || sources[source].label || '?';
-            }
-            let resolution = '-';
-            if (qLevels && qLevels.length > 0 && quality !== null && qLevels[quality]) {
-                const q = qLevels[quality];
-                resolution = q.width && q.height ? q.width + 'x' + q.height : (q.label || '-');
-            }
-            html += '<tr><td>M\u00f3vil ' + num + '</td><td><span class="stat-led" style="background:' + color + '"></span>' + state + '</td><td>' + protocol + '</td><td>' + resolution + '</td><td>' + (fps !== null ? fps : '-') + '</td></tr>';
-        });
-    }
-    tbody.innerHTML = html;
+function createHelpOverlay() {
+    if (document.getElementById('helpOverlay')) return;
+    const help = document.createElement('div');
+    help.id = 'helpOverlay';
+    help.innerHTML = `
+        <h1>MAS TV</h1>
+        <div class="subtitle">LiveStage - Multiviewer &amp; Streaming Monitor</div>
+        <table>
+            <tr><th>Tecla</th><th>Acci&oacute;n</th></tr>
+            <tr><td>1 - 9</td><td>Activar / Desactivar canal</td></tr>
+            <tr><td>0</td><td>Limpiar escena</td></tr>
+            <tr><td>M / N</td><td>Siguiente / Anterior layout</td></tr>
+            <tr><td>V / B</td><td>Siguiente / Anterior fondo</td></tr>
+            <tr><td>L</td><td>Bloquear / Desbloquear canales</td></tr>
+            <tr><td>R</td><td>Resetear layout actual</td></tr>
+            <tr><td>F</td><td>Pantalla completa del canal con foco</td></tr>
+            <tr><td>H</td><td>Abrir / Cerrar esta ayuda</td></tr>
+            <tr><td>ESC</td><td>Cerrar ayuda</td></tr>
+        </table>
+        <p style="color:#888;font-size:13px;margin-top:15px;">Hac&eacute; clic en un canal para darle foco. Arrastr&aacute; desde el centro para mover, us&aacute; las esquinas para redimensionar.</p>
+        <button class="fullscreen-btn" id="fsBtn" onclick="toggleAppFullscreen()">Pantalla Completa</button>
+        <div class="close-hint">Eleg&iacute; un canal (1-9) o layout (M/N) para empezar</div>
+    `;
+    document.body.appendChild(help);
 }
 
 function toggleHelp() {
@@ -1008,11 +896,6 @@ function toggleHelp() {
             fsBtn.classList.toggle('hidden', !!(document.fullscreenElement || document.webkitFullscreenElement));
         }
     }
-}
-
-function closeAllOverlays() {
-    if (statsVisible) toggleStats();
-    if (helpVisible) toggleHelp();
 }
 
 function toggleAppFullscreen() {
@@ -1031,14 +914,11 @@ document.addEventListener('webkitfullscreenchange', updateFullscreenBtn);
 function updateFullscreenBtn() {
     const fsBtn = document.getElementById('fsBtn');
     if (!fsBtn) return;
-    const isFS = document.fullscreenElement || document.webkitFullscreenElement;
-    fsBtn.classList.toggle('hidden', !!isFS);
+    fsBtn.classList.toggle('hidden', !!(document.fullscreenElement || document.webkitFullscreenElement));
 }
 
-// Crear overlays al cargar
-createOverlays();
-
-// Mostrar ayuda al cargar la página
+// Crear y mostrar ayuda al cargar
+createHelpOverlay();
 toggleHelp();
 
 addEventListener("keydown", (evento) => {
@@ -1097,20 +977,15 @@ addEventListener("keydown", (evento) => {
         }
     }
 
-    // Tecla I: Panel de estadísticas
-    if (evento.keyCode == 73) {
-        toggleStats();
-    }
-
-    // Tecla H: Pantalla de ayuda
+    // H: Pantalla de ayuda
     if (evento.keyCode == 72) {
         toggleHelp();
     }
 
-    // ESC: Cerrar overlays (solo si no estamos en fullscreen)
+    // ESC: Cerrar ayuda (solo si no estamos en fullscreen)
     if (evento.keyCode == 27) {
         if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-            closeAllOverlays();
+            if (helpVisible) toggleHelp();
         }
     }
 
