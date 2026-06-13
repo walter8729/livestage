@@ -652,12 +652,17 @@ function applyTVLayout(index) {
             vc.style.left = s.left;
             vc.style.width = s.width;
             vc.style.height = s.height;
-            // Aseguramos que la clase de identificación sea la correcta
-            vc.className = cam.id;
+            vc.className = cam.id + ' videocontainer';
         } else {
             // CREAR: Si no existe, lo instanciamos
             createrVideoContainer(cam.id, cam.rid, cam.data);
         }
+    });
+
+    // Reordenar DOM para que coincida con el orden del layout (último = arriba)
+    layout.cams.forEach(cam => {
+        const vc = document.getElementById(cam.rid).parentElement;
+        if (vc) ctnr.appendChild(vc);
     });
 }
 
@@ -703,7 +708,7 @@ function makePlayer(id, src) {
 function createrVideoContainer(nombreContainer, nombreReproductor, fuenteReproductor) {
     //creamos div donde sera el container
     const vc1 = document.createElement('div');
-    vc1.className = nombreContainer;
+    vc1.className = nombreContainer + ' videocontainer';
     //creamos el wrapper del reproductor con su id
     const rp1 = document.createElement('div');
     rp1.id = nombreReproductor;
@@ -735,6 +740,8 @@ function createrVideoContainer(nombreContainer, nombreReproductor, fuenteReprodu
     // Inicializar interactividad (mover y redimensionar)
     console.log("Inicializando interactividad para: " + nombreContainer);
     initInteractable(vc1);
+
+    return vc1;
 }
 
 /**
