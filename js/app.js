@@ -1034,11 +1034,8 @@ function updateFullscreenBtn() {
 // Crear overlays al cargar
 createOverlays();
 
-// Mostrar ayuda en primera visita
-if (!localStorage.getItem('livestage_help_seen')) {
-    toggleHelp();
-    localStorage.setItem('livestage_help_seen', '1');
-}
+// Mostrar ayuda al cargar la página
+toggleHelp();
 
 addEventListener("keydown", (evento) => {
     let list = OvenPlayer.getPlayerList();
@@ -1070,6 +1067,7 @@ addEventListener("keydown", (evento) => {
     // Tecla 0: Limpiar escena
     if (evento.keyCode == 48) {
         removeAllVideoContainers();
+        if (helpVisible) toggleHelp();
         console.log("Escena vaciada");
     }
 
@@ -1159,12 +1157,14 @@ addEventListener("keydown", (evento) => {
         if (backgroundFileList.length > 0) {
             actualBgIndex = (actualBgIndex + 1) % backgroundFileList.length;
             actualizarBackground();
+            if (helpVisible) toggleHelp();
         }
     }
     if (evento.keyCode == 66) { // B - Anterior
         if (backgroundFileList.length > 0) {
             actualBgIndex = (actualBgIndex - 1 + backgroundFileList.length) % backgroundFileList.length;
             actualizarBackground();
+            if (helpVisible) toggleHelp();
         }
     }
 
