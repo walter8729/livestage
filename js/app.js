@@ -1,6 +1,6 @@
 // Configuración Global
-//const STREAM_SERVER_IP = 'tu.servidor.streaming';
-const STREAM_SERVER_IP = '192.168.1.51';
+const STREAM_SERVER_IP = 'tu.servidor.streaming';
+//const STREAM_SERVER_IP = '192.168.1.51';
 
 OvenPlayer.debug(false);
 let listabg = cargarVideoBackgroundPHP();
@@ -609,48 +609,52 @@ function makePlayer(id, src) {
     const player = OvenPlayer.create(id, src);
     console.log("Se creo el reproductor en elemento con id " + id);
 
-    player.on('stateChanged', function (data) {
-        const container = document.getElementById(id);
-        if (!container) return;
-        const vc = container.parentElement;
-        if (!vc) return;
-        let led = vc.querySelector('.status-led');
-        if (!led) return;
+    try {
+        player.on('stateChanged', function (data) {
+            const container = document.getElementById(id);
+            if (!container) return;
+            const vc = container.parentElement;
+            if (!vc) return;
+            let led = vc.querySelector('.status-led');
+            if (!led) return;
 
-        const state = data.newState || data;
-        led.className = 'status-led';
-        led.dataset.state = state;
+            const state = data.newState || data;
+            led.className = 'status-led';
+            led.dataset.state = state;
 
-        const tooltips = {
-            playing: 'Conectado',
-            loading: 'Cargando...',
-            error: 'Error de conexión',
-            idle: 'En espera',
-            paused: 'En pausa',
-            complete: 'Completado'
-        };
-        led.dataset.tooltip = tooltips[state] || state;
+            const tooltips = {
+                playing: 'Conectado',
+                loading: 'Cargando...',
+                error: 'Error de conexión',
+                idle: 'En espera',
+                paused: 'En pausa',
+                complete: 'Completado'
+            };
+            led.dataset.tooltip = tooltips[state] || state;
 
-        if (state === 'playing') {
-            led.classList.add('playing');
-            clearTimeout(led._hideTimeout);
-            led._hideTimeout = setTimeout(() => {
-                led.classList.add('fade');
-            }, 3000);
-        } else if (state === 'error') {
-            led.classList.add('error');
-            led.classList.remove('fade');
-        } else if (state === 'loading') {
-            led.classList.add('loading');
-            led.classList.remove('fade');
-        } else if (state === 'idle') {
-            led.classList.add('idle');
-            led.classList.remove('fade');
-        } else if (state === 'paused') {
-            led.classList.add('paused');
-            led.classList.remove('fade');
-        }
-    });
+            if (state === 'playing') {
+                led.classList.add('playing');
+                clearTimeout(led._hideTimeout);
+                led._hideTimeout = setTimeout(() => {
+                    led.classList.add('fade');
+                }, 3000);
+            } else if (state === 'error') {
+                led.classList.add('error');
+                led.classList.remove('fade');
+            } else if (state === 'loading') {
+                led.classList.add('loading');
+                led.classList.remove('fade');
+            } else if (state === 'idle') {
+                led.classList.add('idle');
+                led.classList.remove('fade');
+            } else if (state === 'paused') {
+                led.classList.add('paused');
+                led.classList.remove('fade');
+            }
+        });
+    } catch (e) {
+        console.warn("No se pudo suscribir a eventos del player:", e);
+    }
 
     return player;
 }
